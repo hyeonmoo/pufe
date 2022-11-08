@@ -54,11 +54,11 @@
                     <p>3대 중량</p>
 					<a href="#">더보기</a>
 				</div>
-                <p class="bigthree_p">BIG THREE : <span id="bigthree_total">000</span></p>
+                <p class="bigthree_p">BIG THREE : <span id="bigthree_total">${user.squat+user.benchpress+user.deadlift }</span></p>
                 <p class="bigthree_p">RANK : <span id="bigthree_rank">000</span></p>
-                <p class="bigthree_p">SQUAT : <span id="squat">000</span></p>
-                <p class="bigthree_p">BENCH PRESS : <span id="benchP">000</span></p>
-                <p class="bigthree_p">DEAD LIFT : <span id="deadL">000</span></p>
+                <p class="bigthree_p">SQUAT : <span id="squat">${user.squat }</span></p>
+                <p class="bigthree_p">BENCH PRESS : <span id="benchP">${user.benchpress }</span></p>
+                <p class="bigthree_p">DEAD LIFT : <span id="deadL">${user.deadlift }</span></p>
             </div>
             <div id="machine_info" class="article">
                 <div class="top_bar small">

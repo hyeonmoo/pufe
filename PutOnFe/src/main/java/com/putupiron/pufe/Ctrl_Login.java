@@ -24,7 +24,7 @@ public class Ctrl_Login {
 	public String login_get() {
 		return "login";
 	}
-//	로그인 버튼 누를시
+//	로그인 버튼
 	@PostMapping()
 	public String login(String email, String pwd, boolean remEmail, HttpServletRequest req, HttpServletResponse resp, RedirectAttributes ras) throws Exception{
 		if(!loginCheck(email,pwd)) {
@@ -46,6 +46,12 @@ public class Ctrl_Login {
 		User user = userDao.selectUser(email);
 		if(user==null) return false;
 		return user.getUser_pw().equals(pwd);
+	}
+//	로그아웃 버튼
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 //	이메일 찾기
 	@GetMapping("/findEmail")
