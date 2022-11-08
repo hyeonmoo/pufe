@@ -17,12 +17,20 @@
         </div>
         <div class="colume" id="login_menu">
             <div class="article userInfo">
-	            <c:if test="${sessionScope.email==null }">
+            <c:choose>
+	            <c:when test="${sessionScope.email==null }">
 	                <a href="<c:url value='/login'/>" id="login-button">로그인</a>
-	            </c:if>
-	            <c:if test="${sessionScope.email!=null }">
+	            </c:when>
+	            <c:when test='${user.user_type eq "U"}'>
 	                <%@ include file="userInfo.jsp" %>
-				</c:if>
+				</c:when>
+				<c:when test='${user.user_type eq "T" }'>
+					<p>트레이너 화면</p>
+				</c:when>
+				<c:when test='${user.user_type eq "A" }'>
+					<p>관리자 화면</p>
+				</c:when>
+			</c:choose>
             </div>
             <div id="menu1" class="article button"><a href="#" id="menu1_a">상품구매</a></div>
             <div id="menu2" class="article button"><a href="#" id="menu2_a">PT예약</a></div>
@@ -31,7 +39,7 @@
             <div id="recommend" class="article">
 				<div class="top_bar">
                     <p>추천 운동 정보</p>
-					<a href="#">더보기</a>
+					<a href="<c:url value='/nav'/>">더보기</a>
 				</div>
                 <ul id="rec_area">
                     <li>추천 운동 정보 1</li>
@@ -67,7 +75,7 @@
 				</div>
             </div>
             <div id="club_info" class="article">
-                <a href="#" id="address">
+                <a id="address">
                     충북 청주시 서원구 복대로 17번길 57<br> 
                     043-272-0001
                 </a>

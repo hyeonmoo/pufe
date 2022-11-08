@@ -18,4 +18,12 @@ public class Ctrl_Home {
 		m.addAttribute("user", user);
 		return "index";
 	}
+	
+	@GetMapping("/nav")
+	public String navBar(HttpSession session, Model m) throws Exception{
+		String user_email = (String)session.getAttribute("email");
+		User user = userDao.selectUser(user_email);
+		m.addAttribute("user",user);
+		return "navMenu";
+	}
 }
