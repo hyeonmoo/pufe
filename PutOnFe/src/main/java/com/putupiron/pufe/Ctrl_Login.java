@@ -26,7 +26,7 @@ public class Ctrl_Login {
 	}
 //	로그인 버튼
 	@PostMapping()
-	public String login(String email, String pwd, boolean remEmail, HttpServletRequest req, HttpServletResponse resp, RedirectAttributes ras) throws Exception{
+	public String login(String email, String pwd, String toURL, boolean remEmail, HttpServletRequest req, HttpServletResponse resp, RedirectAttributes ras) throws Exception{
 		if(!loginCheck(email,pwd)) {
 			ras.addFlashAttribute("loginCheck","false");
 			return "redirect:/login"; // 이메일-비밀번호 확인
@@ -39,7 +39,8 @@ public class Ctrl_Login {
 			cookie.setMaxAge(0);
 			resp.addCookie(cookie);
 		}
-		return "redirect:/";
+		if(toURL==null || toURL.equals("")) toURL="/";
+		return "redirect:"+toURL;
 	}
 //	로그인 유효성 체크
 	public boolean loginCheck(String email, String pwd) throws Exception{

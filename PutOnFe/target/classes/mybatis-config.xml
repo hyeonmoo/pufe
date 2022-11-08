@@ -4,5 +4,6 @@
 	<typeAliases>
 		<typeAlias alias="User" type="com.putupiron.pufe.User"/>
 		<typeAlias alias="JoinData" type="com.putupiron.pufe.JoinData"/>
+		<typeAlias alias="BigThree" type="com.putupiron.pufe.BigThree"/>
 	</typeAliases>
 </configuration>

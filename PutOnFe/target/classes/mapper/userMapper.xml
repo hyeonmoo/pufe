@@ -18,4 +18,15 @@
 	<update id="resetPw" parameterType="map">
 		update user set user_pw=#{user_pw} where user_email=#{user_email}
 	</update>
+	<!-- Big3 랭킹집계 -->
+	<select id="bigThreeRank" resultType="BigThree">
+		select rank() over (order by squat+benchpress+deadlift desc) as ranking, user_email, user_name,
+		squat+benchpress+deadlift as big3, squat, benchpress, deadlift
+		from user
+		order by big3 desc, user_name desc
+	</select>
+	<!-- 유저 Big3 랭킹정보 -->
+	<select id="userBig3Rank" parameterType="String" resultType="int">
+		select ranking from rankingView where user_email=#{email};
+	</select>
 </mapper>

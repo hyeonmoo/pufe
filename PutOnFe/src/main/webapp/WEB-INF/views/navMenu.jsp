@@ -13,22 +13,32 @@
 </head>
 <body>
     <nav id="nav_menu">
-        <div id="logo" class="menu"><a href="#"></a></div>
-        <div id="menu_recommend" class="menu"><a href="#">추천정보</a></div>
-        <div id="menu_machine_info" class="menu"><a href="#">시설</a></div>
-        <div id="menu_rank" class="menu"><a href="#">랭킹</a></div>
-        <div id="menu_match" class="menu"><a href="#">헬스메이트</a></div>
-        <div id="menu_club_info" class="menu"><a href="#">오시는길</a></div>
+        <div id="logo" class="menu"><a href="<c:url value='/'/>"></a></div>
+        <div id="menu_recommend" class="menu"><a href="<c:url value='/recommend'/>">추천정보</a></div>
+        <div id="menu_machine_info" class="menu"><a href="<c:url value='/machines'/>">시설</a></div>
+        <div id="menu_rank" class="menu"><a href="<c:url value='/bigThree'/>">랭킹</a></div>
+        <div id="menu_match" class="menu"><a href="<c:url value='/matching'/>">헬스메이트</a></div>
+        <div id="menu_club_info" class="menu"><a href="<c:url value='/road'/>">오시는길</a></div>
         <div id="client_info" class="menu">
-            <a href="#"><img src="${path }/resources/img/human.png">${user.user_name }님 | 88.88%</a>
+            <a href="#"><img src="${path}/resources/img/human.png">${not empty sessionScope.email?user.user_name:'손' }님 | 3대 ${user.squat+user.benchpress+user.deadlift}</a>
             <div class="submenu">
-                <a href="#" id="submenu1">${user.user_type=="U"? '상품구매':user.user_type=="T"?'회원목록':'회원관리'}</a>
-                <a href="#" id="submenu2">${user.user_type=="U"? 'PT예약':user.user_type=="T"?'일정관리':'시설관리'}</a>
-                <a href="#">마이페이지</a>
-                <a href="#">로그아웃</a>
+                <a href="<c:url value='/menu1'/>" id="submenu1">${user.user_type=="A"? '회원관리':user.user_type=="T"?'회원목록':'상품구매'}</a>
+                <a href="<c:url value='/menu2'/>" id="submenu2">${user.user_type=="A"? '시설관리':user.user_type=="T"?'일정관리':'PT예약'}</a>
+                <a href="<c:url value='/myPage'/>">마이페이지</a>
+                <a href="<c:url value='/login'/>${not empty sessionScope.email?'/logout':lastPage}">${not empty sessionScope.email?"로그아웃":"로그인"}</a>
             </div>
         </div>
     </nav>
-    <script src="../js/submenu_mouseover.js"></script>
+<script>
+const submenus = document.querySelectorAll('.submenu a');
+for(let submenu of submenus){
+    submenu.addEventListener("mouseover",function(){
+        submenu.parentNode.parentNode.childNodes[1].style.backgroundColor="black";
+    });
+    submenu.addEventListener("mouseout",function(){
+        submenu.parentNode.parentNode.childNodes[1].style.backgroundColor="";
+    });
+}
+</script>
 </body>
 </html>

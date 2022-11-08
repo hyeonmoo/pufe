@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>User Info</title>
+<title>유저 페이지</title>
 </head>
 <body>
 <img src="${path }/resources/img/anchovy.png">
@@ -16,7 +16,7 @@
 <p>2022/06/23~2022/09/22</p>
 <p>22일 | 5회 남음</p>
 <div class="info-nav">
-	<a href="#">마이페이지</a>
+	<a href="<c:url value='/myPage'/>">마이페이지</a>
 	<a href="<c:url value='login/logout'/>">로그아웃</a>
 </div>
 </body>
