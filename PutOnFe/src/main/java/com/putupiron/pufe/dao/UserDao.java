@@ -1,6 +1,10 @@
-package com.putupiron.pufe;
+package com.putupiron.pufe.dao;
 
 import java.util.List;
+
+import com.putupiron.pufe.dto.BigThree;
+import com.putupiron.pufe.dto.JoinData;
+import com.putupiron.pufe.dto.User;
 
 public interface UserDao {
 	User	selectUser(String user_email) throws Exception;

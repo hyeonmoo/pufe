@@ -2,8 +2,8 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias alias="User" type="com.putupiron.pufe.User"/>
-		<typeAlias alias="JoinData" type="com.putupiron.pufe.JoinData"/>
-		<typeAlias alias="BigThree" type="com.putupiron.pufe.BigThree"/>
+		<typeAlias alias="User" type="com.putupiron.pufe.dto.User"/>
+		<typeAlias alias="JoinData" type="com.putupiron.pufe.dto.JoinData"/>
+		<typeAlias alias="BigThree" type="com.putupiron.pufe.dto.BigThree"/>
 	</typeAliases>
 </configuration>

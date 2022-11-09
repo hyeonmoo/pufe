@@ -1,7 +1,9 @@
-package com.putupiron.pufe;
+package com.putupiron.pufe.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import com.putupiron.pufe.dto.JoinData;
 
 public class Validator_join implements Validator {
 	

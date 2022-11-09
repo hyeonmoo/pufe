@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.putupiron.pufe.dao.UserDao;
+import com.putupiron.pufe.dto.User;
+
 @Controller
 @RequestMapping("/login")
 public class Ctrl_Login {

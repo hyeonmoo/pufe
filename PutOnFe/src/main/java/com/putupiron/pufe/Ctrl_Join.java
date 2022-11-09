@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.putupiron.pufe.dao.UserDao;
+import com.putupiron.pufe.dto.JoinData;
+import com.putupiron.pufe.dto.User;
+import com.putupiron.pufe.validator.Validator_join;
+
 @Controller
 public class Ctrl_Join {
 	@Autowired UserDao userDao;

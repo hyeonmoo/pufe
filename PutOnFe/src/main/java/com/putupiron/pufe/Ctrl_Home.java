@@ -10,6 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.putupiron.pufe.dao.UserDao;
+import com.putupiron.pufe.dto.BigThree;
+import com.putupiron.pufe.dto.User;
+
 @Controller
 public class Ctrl_Home {
 	@Autowired UserDao userDao;

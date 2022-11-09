@@ -20,8 +20,7 @@
 	</update>
 	<!-- Big3 랭킹집계 -->
 	<select id="bigThreeRank" resultType="BigThree">
-		select rank() over (order by squat+benchpress+deadlift desc) as ranking, user_email, user_name,
-		squat+benchpress+deadlift as big3, squat, benchpress, deadlift
+		select rank() over (order by squat+benchpress+deadlift desc) as ranking, user_email, user_name,	(squat+benchpress+deadlift) as big3, squat, benchpress, deadlift
 		from user
 		order by big3 desc, user_name desc
 	</select>

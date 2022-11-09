@@ -1,4 +1,4 @@
-package com.putupiron.pufe;
+package com.putupiron.pufe.dto;
 
 import lombok.Data;
 
