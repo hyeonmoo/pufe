@@ -13,22 +13,22 @@
 </head>
 <body>
     <nav id="nav_menu">
-        <div id="logo" class="menu"><a href="#"></a></div>
+        <div id="logo" class="menu"><a href="<c:url value='/'/>"></a></div>
         <div id="menu_recommend" class="menu"><a href="#">추천정보</a></div>
         <div id="menu_machine_info" class="menu"><a href="#">시설</a></div>
         <div id="menu_rank" class="menu"><a href="#">랭킹</a></div>
         <div id="menu_match" class="menu"><a href="#">헬스메이트</a></div>
         <div id="menu_club_info" class="menu"><a href="#">오시는길</a></div>
         <div id="client_info" class="menu">
-            <a href="#"><img src="${path }/resources/img/human.png">${user.user_name }님 | 88.88%</a>
+            <a href="#"><img src="${path }/resources/img/human.png">${user.user_name }님 | ${user.squat+user.benchpress+user.deadlift}kg </a>
             <div class="submenu">
                 <a href="#" id="submenu1">${user.user_type=="U"? '상품구매':user.user_type=="T"?'회원목록':'회원관리'}</a>
                 <a href="#" id="submenu2">${user.user_type=="U"? 'PT예약':user.user_type=="T"?'일정관리':'시설관리'}</a>
                 <a href="#">마이페이지</a>
-                <a href="#">로그아웃</a>
+                <a href="<c:url value='/login.logout'/>">로그아웃</a>
             </div>
         </div>
     </nav>
-    <script src="../js/submenu_mouseover.js"></script>
+    <script src="${path }/resources/js/submenu_mouseover.js"></script>
 </body>
 </html>

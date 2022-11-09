@@ -3,6 +3,8 @@ package com.putupiron.pufe;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import com.putupiron.pufe.dto.JoinData;
+
 public class Validator_join implements Validator {
 	
 	@Override

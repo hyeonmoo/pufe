@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.putupiron.pufe.dao.UserDao;
+import com.putupiron.pufe.dto.User;
+
 @Controller
 public class Ctrl_Home {
 	@Autowired UserDao userDao;
@@ -19,11 +22,22 @@ public class Ctrl_Home {
 		return "index";
 	}
 	
-	@GetMapping("/nav")
-	public String navBar(HttpSession session, Model m) throws Exception{
+	@GetMapping("/road")
+	public String road(HttpSession session, Model m) throws Exception{
 		String user_email = (String)session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user",user);
-		return "navMenu";
+		return "road";
 	}
+	
+	@GetMapping("/machine")
+	public String machine(HttpSession session, Model m) throws Exception{
+		String user_email = (String)session.getAttribute("email");
+		User user = userDao.selectUser(user_email);
+		m.addAttribute("user",user);
+		return "machine";
+	}
+	
+	
 }
+  

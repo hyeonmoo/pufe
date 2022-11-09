@@ -39,7 +39,7 @@
             <div id="recommend" class="article">
 				<div class="top_bar">
                     <p>추천 운동 정보</p>
-					<a href="<c:url value='/nav'/>">더보기</a>
+					<a href="<c:url value='/board/list'/>">더보기</a>
 				</div>
                 <ul id="rec_area">
                     <li>추천 운동 정보 1</li>
@@ -79,7 +79,7 @@
                     충북 청주시 서원구 복대로 17번길 57<br> 
                     043-272-0001
                 </a>
-                <a href="#" id="more">자세히</a>
+                <a href="<c:url value='/road'/>" id="more">자세히</a>
             </div>
         </div>
     </div>

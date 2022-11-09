@@ -2,7 +2,15 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias alias="User" type="com.putupiron.pufe.User"/>
-		<typeAlias alias="JoinData" type="com.putupiron.pufe.JoinData"/>
+		<typeAlias alias="User" type="com.putupiron.pufe.dto.User" />
+		<typeAlias alias="JoinData"
+			type="com.putupiron.pufe.dto.JoinData" />
+		<typeAlias alias="BoardDto"
+			type="com.putupiron.pufe.dto.BoardDto" />
+
+
+		<typeAlias alias="SearchCondition"
+			type="com.putupiron.pufe.SearchCondition" />
+
 	</typeAliases>
 </configuration>

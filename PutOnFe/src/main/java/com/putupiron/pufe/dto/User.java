@@ -1,4 +1,4 @@
-package com.putupiron.pufe;
+package com.putupiron.pufe.dto;
 
 import java.util.Date;
 
@@ -17,4 +17,6 @@ public class User {
 	private	int		squat;
 	private	int		benchpress;
 	private	int		deadlift;
+	
+
 }
