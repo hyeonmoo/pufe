@@ -1,12 +1,14 @@
 package com.putupiron.pufe.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.putupiron.pufe.dto.BigThree;
 import com.putupiron.pufe.dto.JoinData;
 import com.putupiron.pufe.dto.User;
 
@@ -47,5 +49,13 @@ public class UserDao_imp implements UserDao {
 		map.put("user_email", email);
 		map.put("user_pw",pwd);
 		return session.update(namespace+"resetPw",map);
+	}
+	@Override
+	public List<BigThree> bigThreeRank() throws Exception {
+		return session.selectList(namespace+"bigThreeRank");
+	}
+	@Override
+	public Integer userBig3Rank(String email) throws Exception {
+		return session.selectOne(namespace+"userBig3Rank",email);
 	}
 }

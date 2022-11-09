@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.putupiron.machine">
+
+
+
+<select id="selectMachine"  resultType="MachineDto" >
+select mch_name,
+mch_img,mch_serial,mch_date,mch_info,mch_detail from machines
+
+</select>
+</mapper>
+
+
+
+
+
+
+

@@ -5,12 +5,15 @@
 		<typeAlias alias="User" type="com.putupiron.pufe.dto.User" />
 		<typeAlias alias="JoinData"
 			type="com.putupiron.pufe.dto.JoinData" />
+		<typeAlias alias="BigThree"
+			type="com.putupiron.pufe.dto.BigThree" />
+		<typeAlias alias="SearchCondition"
+			type="com.putupiron.pufe.SearchCondition" />
 		<typeAlias alias="BoardDto"
 			type="com.putupiron.pufe.dto.BoardDto" />
 
-
-		<typeAlias alias="SearchCondition"
-			type="com.putupiron.pufe.SearchCondition" />
+<typeAlias alias="MachineDto"
+			type="com.putupiron.pufe.dto.MachineDto" />
 
 	</typeAliases>
 </configuration>

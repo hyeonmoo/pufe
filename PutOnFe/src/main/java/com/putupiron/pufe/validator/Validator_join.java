@@ -1,4 +1,4 @@
-package com.putupiron.pufe;
+package com.putupiron.pufe.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

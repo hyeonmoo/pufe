@@ -26,62 +26,70 @@ import com.putupiron.pufe.service.BoardService;
 public class Ctrl_Board {
 	@Autowired
 	BoardService boardService;
-	@Autowired UserDao userDao;
+	@Autowired
+	UserDao userDao;
 
-	@GetMapping("/list")
-	public String list(SearchCondition sc, HttpServletRequest request, Model m,HttpSession session) {
-		
-		
-		if (!loginCheck(request))
-
-			return "redirect:/login?toURL=" + request.getRequestURL();
-		try {
-			int totalCnt = boardService.getSearchResultCnt(sc);
-			PageHandler pageHandler = new PageHandler(totalCnt, sc);
-			
-			
-			List<BoardDto> list = boardService.getSearchResultPage(sc);
-			Date now = new Date();
-			m.addAttribute("now", now);
-			m.addAttribute("list", list);
-			
-			m.addAttribute("ph", pageHandler);
-			String user_email = (String)session.getAttribute("email");
-			User user = userDao.selectUser(user_email);
-			m.addAttribute("user",user);
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "boardList";
-
+	public User navBar(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+		String user_email = (String) session.getAttribute("email");
+		User user = userDao.selectUser(user_email);
+		m.addAttribute("user", user);
+		m.addAttribute("lastPage", "?toURL=" + hsReq.getServletPath());
+		return user;
 	}
 
+	/*
+	 * @GetMapping("/list") public String list(SearchCondition sc,
+	 * HttpServletRequest request, Model m,HttpSession session) {
+	 * 
+	 * 
+	 * 
+	 * if (!loginCheck(request))
+	 * 
+	 * return "redirect:/login?toURL=" + request.getRequestURL();
+	 * 
+	 * try { int totalCnt = boardService.getSearchResultCnt(sc); PageHandler
+	 * pageHandler = new PageHandler(totalCnt, sc);
+	 * 
+	 * 
+	 * List<BoardDto> list = boardService.getSearchResultPage(sc); Date now = new
+	 * Date(); m.addAttribute("now", now); m.addAttribute("list", list);
+	 * 
+	 * m.addAttribute("ph", pageHandler);
+	 * 
+	 * String user_email = (String)session.getAttribute("email"); User user =
+	 * userDao.selectUser(user_email); m.addAttribute("user",user);
+	 * 
+	 * 
+	 * } catch (Exception e) { e.printStackTrace(); } return "boardList";
+	 * 
+	 * }
+	 */
+
 	@GetMapping("/read")
-	public String read(Integer bno,SearchCondition sc, Model m) {
+	public String read(Integer bno, SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) {
 		try {
+			User user = navBar(session, m, hsReq);
 			BoardDto boardDto = boardService.read(bno);
 			m.addAttribute("boardDto", boardDto);
 			m.addAttribute("mode", "read");
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "redirect:/board/list"+sc.getQueryString();
+			return "redirect:/recommend" + sc.getQueryString();
 		}
 		return "board";
 
 	}
 
 	@PostMapping("/remove")
-	public String remove(Integer bno, SearchCondition sc, Model m, HttpSession session,
-			RedirectAttributes redatt) {
-		
+	public String remove(Integer bno, SearchCondition sc, HttpSession session, Model m, RedirectAttributes redatt) {
+
 		try {
 			String writer = (String) session.getAttribute("email");
 			int rowCnt = boardService.remove(bno, writer);
 			if (rowCnt == 1) {
 				redatt.addFlashAttribute("msg", "del");
-				return "redirect:/board/list"+sc.getQueryString();
+				return "redirect:/recommend" + sc.getQueryString();
 			} else {
 				throw new Exception("board remove error");
 			}
@@ -89,26 +97,28 @@ public class Ctrl_Board {
 			e.printStackTrace();
 			redatt.addFlashAttribute("msg", "error");
 		}
-		return "redirect:/board/list"+sc.getQueryString();
+		return "redirect:/recommend" + sc.getQueryString();
 	}
 
 	@GetMapping("/write")
-	public String write(Model m) {
+	public String write(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+		User user = navBar(session, m, hsReq);
 		m.addAttribute("mode", "write");
 		return "board";
 	}
 
 	@PostMapping("/write")
-	public String save(BoardDto boardDto, Model m, HttpSession session, RedirectAttributes reatt)  {
-		String writer = (String)session.getAttribute("email");
-		
+	public String save(BoardDto boardDto, HttpSession session, Model m, HttpServletRequest hsReq,
+			RedirectAttributes reatt) {
+		String writer = (String) session.getAttribute("email");
+
 		boardDto.setWriter(writer);
 		try {
 			int rowCnt = boardService.write(boardDto);
 			if (rowCnt != 1)
 				throw new Exception("Write Error");
 			reatt.addFlashAttribute("msg", "write_ok");
-			return "redirect:/board/list";
+			return "redirect:/recommend";
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,39 +128,36 @@ public class Ctrl_Board {
 		}
 
 	}
-	
+
 	@PostMapping("/modify")
-	public String modify(SearchCondition sc,BoardDto boardDto, Model m, HttpSession session, RedirectAttributes reatt) {
+	public String modify(SearchCondition sc, BoardDto boardDto, HttpSession session, Model m, HttpServletRequest hsReq,
+			RedirectAttributes reatt) {
 		String writer = (String) session.getAttribute("email");
 		boardDto.setWriter(writer);
-		
+
 		try {
 			int rowCnt = boardService.modify(boardDto);
 			if (rowCnt != 1)
 				throw new Exception("modify Error");
 			reatt.addFlashAttribute("msg", "modify_ok");
-			
-			return "redirect:/board/list"+sc.getQueryString();
+
+			return "redirect:/recommend" + sc.getQueryString();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			m.addAttribute("boardDto", boardDto);
 			m.addAttribute("msg", "modify_error");
-			m.addAttribute("m","renew");
+			m.addAttribute("m", "renew");
 			return "board";
 		}
 
 	}
-	
 
-	private boolean loginCheck(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		
-		if (session.getAttribute("email") != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	/*
+	 * private boolean loginCheck(HttpServletRequest request) { // TODO
+	 * Auto-generated method stub HttpSession session = request.getSession();
+	 * 
+	 * if (session.getAttribute("email") != null) { return true; } else { return
+	 * false; } }
+	 */
 }

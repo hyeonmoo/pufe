@@ -17,6 +17,4 @@ public class User {
 	private	int		squat;
 	private	int		benchpress;
 	private	int		deadlift;
-	
-
 }

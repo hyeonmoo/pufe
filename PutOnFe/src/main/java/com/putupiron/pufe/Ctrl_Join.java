@@ -15,9 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.JoinData;
 import com.putupiron.pufe.dto.User;
+import com.putupiron.pufe.validator.Validator_join;
 
 @Controller
-public class Ctrl_Join {
+public class Ctrl_Join{
 	@Autowired UserDao userDao;
 	
 	@GetMapping("/join")
