@@ -56,12 +56,11 @@
                     <li>추천 운동 정보 4</li>
                 </ul>
 			</div>
-            <div id="matching" class="article">
+            <div id="machine_info" class="article">
                 <div class="top_bar">
-                    <p>헬스 메이트</p>
-					<a href="<c:url value='/matching'/>">더보기</a>
+                    <p>클럽 기구 정보</p>
+					<a href="<c:url value='/machines'/>">더보기</a>
 				</div>
-                <div id="match_info">로그인 후 이용하실 수 있습니다.</div>
             </div>
         </div>
         <div class="colume" id="article_colume2">
@@ -76,11 +75,12 @@
                 <p class="bigthree_p">BENCH PRESS : <span id="benchP">${not empty user?user.benchpress:'000' }</span></p>
                 <p class="bigthree_p">DEAD LIFT : <span id="deadL">${not empty user?user.deadlift:'000' }</span></p>
             </div>
-            <div id="machine_info" class="article">
+            <div id="matching" class="article">
                 <div class="top_bar small">
-                    <p>클럽 기구 정보</p>
-					<a href="<c:url value='/machines'/>">더보기</a>
+                    <p>헬스 메이트</p>
+					<a href="<c:url value='/matching'/>">더보기</a>
 				</div>
+                <div id="match_info">로그인 후 이용하실 수 있습니다.</div>
             </div>
             <div id="club_info" class="article">
                 <a id="address">
