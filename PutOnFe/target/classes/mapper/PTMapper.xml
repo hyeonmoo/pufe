@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.putupiron.pt">
+	<!-- 트레이너 예약일정 출력(유저의 경우 예약된 일정만 보이게) -->
+	<select id="reservList" parameterType="map" resultType="PTReserv">
+		select * from pt_reserview where trainer_email=#{email} <if test='user_type=="U"'>and request="booked"</if> order by pt_date, pt_time, pt_no
+	</select>
+	<!-- 로그인 한 유저의 예약 정보 -->
+	<select id="userBookList" parameterType="String" resultType="PTReserv">
+		select * from pt_reserview where user_email=#{email}
+	</select>
+	<!-- 해당 고유번호에 해당하는 예약 날짜-시간 호출 -->
+	<select id="ptDateTime" parameterType="int" resultType="String">
+		select concat(pt_date,"_",pt_time) from pt_reserview where pt_no=#{pt_no}
+	</select>
+	<!-- PT예약 -->
+	<insert id="reserve" parameterType="PTReserv">
+		insert into pt_reserv (pt_date, pt_time, trainer_email, user_email, request) values(#{pt_date},#{pt_time},#{trainer_email},#{user_email},"requested")
+	</insert>
+	<!-- PT불가시간 설정 -->
+	<insert id="disable" parameterType="PTReserv">
+		insert into pt_reserv (pt_date, pt_time, trainer_email, request) values(#{pt_date},#{pt_time},#{trainer_email},"booked")
+	</insert>
+	<!-- 예약 확정 -->
+	<update id="confirm" parameterType="int">
+		update pt_reserv set request="booked" where pt_no=#{pt_no}
+	</update>
+	<!-- PT예약취소 -->
+	<delete id="cancel" parameterType="int">
+		delete from pt_reserv where pt_no=#{pt_no}
+	</delete>
+	<!-- PT예약변경 -->
+	<update id="update" parameterType="PTReserv">
+		update pt_reserv set pt_date=#{pt_date}, pt_time=#{pt_time}, request="booked" where pt_no=#{pt_no}
+	</update>
+</mapper>

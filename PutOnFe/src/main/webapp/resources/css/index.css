@@ -7,57 +7,190 @@
     margin:0; padding:0;
     font: 300 18px/1 mbng;
 }
-p,span{cursor:default;}
+p,span,div{cursor:default;}
 a{text-decoration: none; color:white;}
 body{background-color: #121212;}
 li{list-style: none;}
-/* 컨텐츠 영역 박스 */
+/* 컨테이너 박스 */
 #container{
-    width:1024px; height:680px;
+    width:1000px; height:680px;
     display: grid;
     grid-template-columns: 15% 25% 30% 30%;
     position:absolute;
     top:50%; left:50%;
     transform: translate(-50%,-50%);
 }
-/* 각 항목 공통 효과 */
-.article{
-    border:1px solid white;
-    border-radius: 5px;
-    color:black;
-    margin:15px 0;
-    color:white;
+/* 로고 디자인 */
+.column:first-child{
+    background : url(../img/logo_main.png) no-repeat center center;
+    background-size: auto 660px;
+    height:680px;
 }
-/* 칼럼 영역 */
-.colume{
+
+/* 칼럼 */
+.column{
     margin: 0 4%;
     height:100%;
+    display: grid;
 }
-#login_menu{
-    display:grid;
+.column:nth-child(2){
     grid-template-rows: 60% 20% 20%;
 }
-#article_colume1{
-    display: grid;
+.column:nth-child(3){
     grid-template-rows: 50% 50%;
 }
-#article_colume2{
-    display: grid;
+.column:last-child{
     grid-template-rows: 40% 40% 20%;
 }
 
-/* 로고 디자인 */
-#logo{
-    background : url(../img/logo_main.png) no-repeat left center;
-    background-size: 100% 100%;
-    margin:5%;
-    height:98%;
+/* 콘텐츠 박스 */
+.article{
+    border:1px solid white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #999;
+    margin:10px 0;
+    color:white;
+    position:relative;
+}
+.article.hasbar{
+	display:flex;
+	flex-direction:column;
 }
 
-/* 버튼 */
-.button{
-    text-align: center;
+/* 콘텐츠 */
+.contents{
+	flex-grow:1;
+	position:relative;
 }
+/* 리스트형 콘텐츠 */
+.contents.list{
+    display: grid;
+    grid-template-rows: repeat(auto-fill,minmax(45px,1fr));
+}
+.contents.list>li{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.contents.list>li>span{
+	display:inline-block;
+	text-align:center;
+}
+.contents.list>li>span:first-child{
+	width:60%;
+}
+.contents.list>li>span:last-child{
+	width:40%;
+}
+/* 이미지 슬라이드형 콘텐츠 */
+.contents.slide>img{
+	display:none;
+	width:250px; height:250px;
+	position: absolute;
+	top:50%; left:50%;
+	transform:translate(-50%,-50%);
+}
+.contents.slide>button{
+	position: absolute;
+    width: 15%;
+    height: 100%;
+    border: 0;
+    color: white;
+    background: transparent;
+    font-size: 40px;
+}
+.contents.slide #prev{
+	left:0;
+	border-radius:0 0 0 5px;
+}
+.contents.slide #next{
+	right:0;
+	border-radius:0 0 5px 0;
+}
+.contents.slide>button:hover{
+	background:rgba(18,18,18,0.5);
+}
+/* 폼 콘텐츠 */
+.contents.form{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+}
+.contents.form form{
+	width:100%; height:100%;
+	display:flex;
+	flex-wrap:wrap;
+	align-content:center;
+	justify-content:center;
+}
+.contents.form form>input, .contents.form form>select{
+	height: 40px;
+	text-align:center;
+	margin:10px;
+	border:0;
+	border-radius:5px;
+	background:#eee;
+	color:#121212;
+	cursor:default;
+	padding-top:4px;
+}
+.contents.form form>input[type=date]{
+	width: 260px;
+}
+.contents.form form>input[type=text]{
+	width: 120px;
+}
+.contents.form form>select{
+	width: 120px;
+}
+.contents.form form>input[type=submit]{
+	width: 260px;
+	background:#121212;
+	color:white;
+	border:2px solid white;
+	box-shadow:0 0 5px #999;
+	cursor:pointer;
+}
+.contents.form form>input[type=submit]:hover{
+	transform:scale(101%);
+}
+.contents.form form>input:not([type=submit]):focus{
+	outline:0;
+}
+
+::-webkit-calendar-picker-indicator{
+	width:30px; height:30px;
+	margin-right:5px;
+	color:white;
+}
+/* 오시는 길 */
+.address{position:relative;}
+.address>a:first-child{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.5;
+    height:100%;
+}
+.address>a:last-child{
+    position:absolute;
+    top:0;
+    width:100%; height:100%;
+    border-radius: inherit;
+    text-align:center;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    z-index: 10;
+}
+.address>a:last-child:hover{
+    background-color:rgba(18,18,18,0.7);
+    opacity: 1;
+}
+/* 버튼 */
 .button>a{
     width:100%; height:100%;
     display: flex;
@@ -65,41 +198,36 @@ li{list-style: none;}
     justify-content: center;
 }
 .button:hover{
-    background-color: black;
     transform:scale(105%);
 }
 
-/* 컨텐츠 상단 바 */
+/* 콘텐츠 상단 바 */
 .top_bar{
-    width:100%; height: 8%;
+    width:100%; height:25px;
     border-bottom:1px solid white;
     border-radius: 3px 3px 0 0;
     display: flex;
     justify-content: space-between;
-    padding:0 3%;
+    padding:0 10px;
 }
 .top_bar>a, .top_bar>p{
     height:100%;
     color:white;
     display: flex;
+    align-items: flex-end;
 }
 .top_bar>p{
     justify-content: flex-start;
-    align-items: flex-end;
 }
 .top_bar>a{
     justify-content: center;
-    align-items: flex-end;
     font-size:0.9em;
 }
-.top_bar>a:hover{text-decoration: underline;}
-
-.small{height:10%;}
+.top_bar>a:hover{
+	color:#ddd;
+}
 
 /* 회원정보 영역 */
-.userInfo{
-	position:relative;
-}
 #login-button{
 	position:absolute;
 	top:50%; left:50%;
@@ -120,19 +248,6 @@ li{list-style: none;}
 	border:1px solid white;
 	padding:2px;
 }
-.userInfo>p{
-	margin:5px auto;
-	width:100%;
-	padding:0 25px;
-	font-size:0.8em;
-	text-align:right;
-}
-.userInfo>p:first-of-type{
-	display:flex;
-	justify-content:space-between;
-	margin-bottom:20px;
-	font-size:1em;
-}
 .info-nav{
 	width:100%; height: 30px;
 	padding:0 15px;
@@ -147,99 +262,62 @@ li{list-style: none;}
 	margin:0 10px;
 }
 .info-nav>a:hover{
-	text-decoration:underline;
+	color:#eee;
 }
-
-/* 헬스메이트 */
-#matching{
-	position:relative;
+/* 관리자 화면 */
+.admin{
+	width:180px; height: 130px;
+	margin:0 auto;
+	text-align:left;
 }
-#match_info{
-	width:100%;
-	position:absolute;
-	top:50%; left:50%;
-	transform : translate(-50%,-50%);
-	text-align:center;
+.admin p{
+	display:flex;
+	justify-content:space-between;
+	margin-top:5px;
 }
-
-/* 추천 운동 정보 */
-#rec_area{
-    width:100%; height:92%;
-    display: grid;
-    grid-template-rows: repeat(1fr,4);
+.admin p:first-child{
+	margin-bottom:15px;
 }
-#rec_area>li{
-    display : flex;
-    justify-content:center;
-    align-items:center;
+.admin p>span{
+	display:inline-block;
+	width:70px;
+	font-size:0.9em;
 }
-
-/* 시설정보 이미지 슬라이드 */
-.slide{
-	width:100%; height:92%;
-	position:relative;
+.admin p:first-child>span{font-size:1em;}
+.admin p>span:first-child{text-align:left;}
+.admin p>span:last-child{text-align:right;}
+/* 트레이너 화면 */
+.trainer{
+	width:180px; height:300px;
+	margin:25px auto;
 }
-.slide>img{
-	position:absolute;
-	top:2%; left:2%;
-	width:96%; height:96%;
+.trainer p{
+	display:flex;
+	justify-content:space-between;
+	margin-bottom:2px;
 }
-.slide>button{
-	position:absolute;
-	width:15%; height:100%;
-	border: none;
-	color:white;
-	background:transparent;
-	font-size:40px;
+.trainer p>span{
+	display:inline-block;
+	width:70px;
+	font-size:0.9em;
 }
-#prev{
-	left:0;
-	border-radius:0 0 0 5px;
+.trainer p:first-child>span, .trainer p:nth-child(2)>span{font-size:1em;}
+.trainer p:nth-child(-n+3){margin-bottom:6px;}
+.trainer p>span:first-child{text-align:left;}
+.trainer p>span:last-child{text-align:right;}
+.trainer p:nth-child(n+4)>span:first-child{width:100px;text-align:right;}
+/* 일반유저 화면 */
+.user{
+	width:180px; height:130px;
+	margin:0 auto;
+	text-align:right;
 }
-#next{
-	right:0;
-	border-radius:0 0 5px 0;
+.user p{
+	margin-bottom:5px;
+	font-size:0.9em;
 }
-#prev:hover, #next:hover{
-	background-color:rgba(18,18,18,0.3);
-}
-/* Big Three */
-.bigthree_p{
-    width:100%; height:18%;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    padding-right:25%;
-}
-.bigthree_p>span{
-    display: inline-block;
-    width: 50px;
-    text-align:right;
-}
-
-/* 헬스클럽 위치정보 */
-#club_info{position:relative;}
-#club_info>#address{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    line-height: 1.5;
-    height:100%;
-}
-#club_info>#more{
-    position:absolute;
-    top:0;
-    width:100%; height:100%;
-    border-radius: inherit;
-    text-align:center;
-    opacity: 0;
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    z-index: 10;
-}
-#club_info>#more:hover{
-    background-color:rgba(18,18,18,0.7);
-    opacity: 1;
+.user p:first-child{
+	display:flex;
+	justify-content:space-between;
+	margin-bottom:15px;
 }

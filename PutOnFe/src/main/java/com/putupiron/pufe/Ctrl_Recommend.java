@@ -97,6 +97,7 @@ public class Ctrl_Recommend {
 	public String remove(Integer rec_num, SearchCondition sc, Model m, HttpSession session, RedirectAttributes ras) {
 		try {
 			String user_email = (String)session.getAttribute("email");
+			
 			int rowCnt=recDao.remove(rec_num, user_email);
 			if(rowCnt==1) {
 				ras.addFlashAttribute("msg","del");

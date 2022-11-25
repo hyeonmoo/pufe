@@ -20,7 +20,7 @@ a{text-decoration: none;}
     justify-content:flex-start;
 }
 /* 로고 */
-#container>img{
+#container>a>img{
     height:100%;
 }
 /* 로그인 박스 */

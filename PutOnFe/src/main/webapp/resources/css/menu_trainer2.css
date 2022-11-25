@@ -1,4 +1,183 @@
-.container{
-	width:900px;
-	margin: 100px auto 0 auto;
+@font-face {
+    font-family: mbng;
+    src: url(../fonts/Mabinogi_Classic_OTF.woff);
 }
+#menuTitle{
+	width:1200px;
+	margin: 100px auto 0 auto;
+	font-size:40px;
+}
+.container{
+	width:1200px;
+	margin: 0 auto;
+	display:flex;
+	justify-content:space-between;
+}
+#calendar{
+	width:490px;
+	border-collapse:collapse;
+}
+#calendar th{
+	width:70px; height:60px;
+	border:0;
+	cursor:default;
+	color:white;
+	background:#121212;
+	font-size:1.2em;
+}
+#calendar td{
+	width:70px; height:70px;
+	border:0;
+	cursor:pointer;
+	position:relative;
+}
+#calendar td:first-child{color:rgb(255,70,70);}
+#calendar td:last-child{color:rgb(70,150,255);}
+.date>p:first-child{
+	width:100%; height:50px;
+	font-size:1.5em;
+	position:absolute;
+	top:0;left:0;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+}
+.date>p:last-child{
+	width:100%; height:20px;
+	position:absolute;
+	bottom:0;left:0;
+	display:flex;
+	justify-content:space-around;
+	align-items:flex-start;
+}
+.requests, .books{
+	width:30px; height:100%;
+	font:15px mbng;
+}
+.requests{
+	color:rgb(250,130,0);
+	text-align:left;
+}
+.books{
+	color:rgb(100,200,100);
+	text-align:right;
+}
+.reservations{
+	width:705px; height:470px;
+}
+.reservations>h1{
+	width:100%; height:70px;
+	text-align:center;
+	background:#121212;
+	color:white;
+	display:grid;
+	grid-template-columns:40% 20% 40%;
+}
+.reservations>h1>span{
+	line-height:70px;
+	font-size:20px;
+}
+#dateTitle{font-size:15px;}
+.uls{
+	width:100%; height:340px;
+	background:#eee;
+	display:flex;
+	justify-content:space-between;
+}
+.uls>ul{
+	width:350px; height:100%;
+	background:#eee;
+	overflow:auto;
+	list-style:none;
+}
+::-webkit-scrollbar{
+	width:8px;
+}
+::-webkit-scrollbar-thumb{
+	background:#121212;
+	border-radius:4px;
+}
+::-webkit-scrollbar-track{
+	background:white;
+}
+.uls>ul>li{
+	display:flex;
+	width:100%; height:80px;
+	background:white;
+	margin-bottom:5px;
+	justify-content:space-between;
+	align-items:center;
+	cursor:pointer;
+}
+.uls>ul>li>span{
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	width:35%; height:100%;
+	text-align:center;
+	font: 1.3em mbng;
+	position:relative;
+}
+.uls>ul>li>span>font{
+	position:absolute;
+	color:#aaa;
+	font: 0.7em mbng;
+}
+.uls>ul>li>span>font:first-child{
+	top:0;right:3px;
+	text-align:right;
+}
+.uls>ul>li>span>font:last-child{
+	bottom:11px; right:26px;
+}
+.buttons{
+	width:100%; height:60px;
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+}
+.buttons>button{
+	height:100%;
+	background:#121212;
+	color:white;
+	border:0;
+	float:left;
+	cursor:pointer;
+}
+#requestList>div{
+	width:100%; height:100%;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+}
+#requestList>div>input{
+	width:70%; height:40px;
+	margin:10px auto;
+}
+#requestList>div>input.text{
+	background:white;
+	color:#121212;
+	font:1em mbng;
+	text-align:center;
+}
+#requestList>div>input.button{
+	font-size:25px;
+	border:0;
+	background:#121212;
+	color:white;
+	cursor:pointer;
+}
+::-webkit-calendar-picker-indicator{
+	width:25px; height:25px;
+}
+::-webkit-outer-spin-button, ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#today{background:rgba(70,130,150,0.7);}
+.disabled{background:#eee;}
+.selected{background:rgb(70,130,150) !important;}
+#reservationList .selected{background:rgb(100,200,100) !important;}
+#requestList .selected{background:rgb(250,130,0) !important;}

@@ -1,8 +1,12 @@
 package com.putupiron.pufe.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor 
+@AllArgsConstructor
 public class JoinData{
 	private	String	user_email;
 	private	String	user_pw;

@@ -12,7 +12,7 @@ import com.putupiron.pufe.dto.Recommend;
 import com.putupiron.pufe.vo.SearchCondition;
 
 @Repository
-public class RecommendDao_imp implements RecommendDao {
+public class RecommendDao_Impl implements RecommendDao  {
 	@Autowired SqlSession session;
 	String namespace="com.putupiron.recommend.";
 	
@@ -37,11 +37,24 @@ public class RecommendDao_imp implements RecommendDao {
 		return session.delete(namespace+"remove",map);
 	}
 	@Override
+	public List<Recommend> indexrec() throws Exception{
+		return session.selectList(namespace+"indexrec") ;
+	}
+	@Override
 	public List<Recommend> search(SearchCondition sc) throws Exception{
 		return session.selectList(namespace+"search",sc);
 	}
 	@Override
 	public int searchCnt(SearchCondition sc) throws Exception{
 		return session.selectOne(namespace+"searchCnt",sc);
+	}
+	@Override
+	public int updateCommentCnt(Integer rec_num, Integer comment_cnt)throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("@@@@@@@@@@@@@@@"+rec_num+"/"+comment_cnt);
+		Map map = new HashMap();
+    	map.put("comment_cnt", comment_cnt); 
+    	map.put("rec_num", rec_num);
+    	return session.update(namespace+"updateCommentCnt", map);
 	}
 }

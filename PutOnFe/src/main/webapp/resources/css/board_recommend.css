@@ -37,12 +37,14 @@
 	margin-top: 10px;
 	width: 680px;
 }
+
 .btn {
 	border-radius: 10px;
 	background-color: #121212;
 	color: white;
 	font-size: 11px;
 	padding: 5px;
+	cursor:pointer;
 }
 textarea {
 	padding: 20px;
@@ -50,4 +52,17 @@ textarea {
 }
 input {
 	padding: 0 0 0 10px;
+	cursor:pointer;
 }
+ul{
+	list-style:none;
+}
+.commenter{
+	font-size: 11px;
+}
+ul li {
+	
+	margin:5px;
+	
+	list-style-type: none; float: left;}
+	

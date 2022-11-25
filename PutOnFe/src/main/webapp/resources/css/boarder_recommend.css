@@ -7,7 +7,7 @@
 	text-align:center;
 	font-size:40px;
 	margin:20px auto;
-	cursor:default;
+	
 }
 .container>table{
 	width:100%;
@@ -36,7 +36,7 @@
 	background-color: rgb(70,140,160) !important;
 	color:white;
 }
-a:hover {
+.container a:hover {
   text-decoration: underline;
 }
 .pagination {
@@ -53,4 +53,15 @@ a:hover {
     background-color: #fff;
     border: 1px solid #ddd;
 }
-
+input{
+	border:0 solid black;
+	background-color:#eee;
+	text-align: center;
+	cursor:pointer;
+}
+button{
+	border:0 solid black;
+	background-color:#eee;
+	text-align: center;
+	cursor:pointer;
+}

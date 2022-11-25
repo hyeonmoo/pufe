@@ -17,11 +17,8 @@
 <%@ include file="navMenu.jsp" %>
 
 <div class="container">
-
 <h1>추천 운동 정보</h1>
-
 	<table>
-	
 		<tr>
 			<th style="width: 10%;">번호</th>
 			<th style="width: 40%;">제목</th>
@@ -32,8 +29,9 @@
 		<c:forEach var="board" items="${list }">
 			<tr>
 				<td>${board.rec_num }</td>
-				<td ><a href="<c:url value='/recommend/read${ph.sc.queryString }&rec_num=${board.rec_num }'/>" style="color: black">${board.rec_title }</a></td>
-				<td>${board.user_email }</td>
+				<td ><a href="<c:url value='/recommend/read${ph.sc.queryString }&rec_num=${board.rec_num }'/>" style="color: black">${board.rec_title }</a>
+				<span style="color:red">[${board.comment_cnt }]</span></td>
+				<td>${board.user_name }</td>
 				
 		         <fmt:formatDate var="today" value="${now}" pattern="yyyy-MM-dd"/>
 				<fmt:formatDate var="rec_date" value="${board.rec_date}" pattern="yyyy-MM-dd"/>
@@ -47,6 +45,7 @@
 		          </c:choose>
 				
 				<td>${board.views }</td>
+				
 			</tr>
 		</c:forEach>
 	</table>

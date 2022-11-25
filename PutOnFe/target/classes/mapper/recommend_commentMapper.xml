@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.putupiron.recommend_comment">
+
+<sql id="select1">
+		select recommend_comments.*, username.name as user_name
+		from recommend_comments left join username on username.email=recommend_comments.user_email
+	</sql>
+
+
+    <delete id="deleteAll" parameterType="int">
+        DELETE FROM recommend_comments
+        WHERE  rec_num = #{rec_num}
+    </delete>
+    <select id="count" parameterType="int" resultType="int">
+        SELECT count(*) FROM recommend_comments
+        WHERE  rec_num = #{rec_num}
+    </select>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM recommend_comments WHERE rec_com_num = #{rec_com_num} AND user_email = #{user_email}
+    </delete>
+
+    <insert id="insert" parameterType="Rec_Comment">
+        INSERT INTO recommend_comments
+            (rec_num, com_text, user_email, com_date)
+        VALUES
+            (#{rec_num}, #{com_text}, #{user_email}, now())
+    </insert>
+
+    <select id="selectAll" parameterType="int" resultType="Rec_Comment">
+   <include refid="select1"/>
+        WHERE rec_num = #{rec_num}
+        ORDER BY com_date ASC, rec_com_num ASC
+    </select>
+
+    <select id="select" parameterType="int" resultType="Rec_Comment">
+        SELECT rec_com_num, rec_num, com_text, user_email, com_date
+        FROM recommend_comments
+        WHERE rec_com_num = #{rec_com_num}
+    </select>
+
+ 
+</mapper>

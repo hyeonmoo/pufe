@@ -8,6 +8,13 @@
 		<typeAlias alias="Machine" type="com.putupiron.pufe.dto.Machine"/>
 		<typeAlias alias="Recommend" type="com.putupiron.pufe.dto.Recommend"/>
 		<typeAlias alias="UserView" type="com.putupiron.pufe.dto.UserView"/>
+		<typeAlias alias="TrainerView" type="com.putupiron.pufe.dto.TrainerView"/>
+		<typeAlias alias="Statistics" type="com.putupiron.pufe.dto.Statistics"/>
+		<typeAlias alias="TrainerInfo" type="com.putupiron.pufe.dto.TrainerInfo"/>
+		<typeAlias alias="PTReserv" type="com.putupiron.pufe.dto.PTReserv"/>
+		<typeAlias alias="Rec_Comment" type="com.putupiron.pufe.dto.Rec_Comment"/>
+		<typeAlias alias="Goods" type="com.putupiron.pufe.dto.Goods"/>
+		<typeAlias alias="HealthMate" type="com.putupiron.pufe.dto.HealthMate"/>
 		
 		<typeAlias alias="SearchCondition" type="com.putupiron.pufe.vo.SearchCondition"/>
 	</typeAliases>

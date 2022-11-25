@@ -1,4 +1,70 @@
 .container{
-	width:900px;
+	width:1200px;
 	margin: 100px auto 0 auto;
+}
+.container h1{
+	font-size:40px;
+	margin: 0 auto;
+}
+.container table{
+	border-collapse:collapse;
+	text-align:center;
+}
+.container tr:nth-of-type(odd){
+	background-color:#eee;
+}
+.container th{
+	background-color:#121212;
+	color:white;
+	height:40px;
+	cursor:default;
+	font-size:1.1em;
+}
+.container td{
+	height:30px;
+	cursor:default;
+	position:relative;
+	font-size:1em;
+}
+.container td>button{
+	display:inline-block;
+	width:30px; height:100%;
+	border:0;
+	background-color:transparent;
+	position:absolute;
+	right:3px; top:0;
+	cursor:pointer;
+	opacity:0;
+}
+.container td:hover>button{opacity:1;}
+.container td>button>img{
+	width:100%; height:80%;
+	margin:3px auto;
+}
+.editor{
+	display:none;
+	position:absolute;
+	top:0; right:-122px;
+	border:2px solid #121212;
+	border-radius:3px;
+	padding:10px;
+	z-index:10;
+	background-color:white;
+}
+.editor>input{
+	display:block;
+	width:100px; height:25px;
+	border:1px solid #121212;
+	border-radius:3px;
+	text-align:center;
+	margin: 3px auto;
+	z-index:10;
+}
+.editor>input[type=submit]{
+	margin-top:6px;
+	border:0;
+	background-color:#121212;
+	color:white;
+	cursor:pointer;
+	z-index:10;
 }

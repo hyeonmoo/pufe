@@ -1,4 +1,117 @@
+@font-face {
+    font-family: mbng;
+    src: url(../fonts/Mabinogi_Classic_OTF.woff);
+}
+ul{list-style:none;}
+a{text-decoration:none;}
+::-webkit-scrollbar{
+	width:12px; 
+}
+::-webkit-scrollbar-thumb{
+	background:#121212;
+	border-radius:6px;
+}
+::-webkit-scrollbar-track{
+	background:#eee;
+}
 .container{
-	width:900px;
+	width:1050px; height: 502px;
 	margin: 100px auto 0 auto;
+	display:flex;
+	justify-content:space-between;
+}
+.goodsArea{
+	width:598px; height:100%;
+	border:1px solid #121212;
+	box-shadow : 0 0 3px #999;
+}
+.goodsNav{
+	width:100%; height:60px;
+	display:flex;
+	justify-content:center;
+}
+.goodsNav>a{
+	display:inline-block;
+	width:50%; height:60px;
+	text-align:center;
+	line-height:60px;
+	background:#121212;
+	color:white;
+	font-size:20px;
+}
+.goodsList{
+	width:100%; height: 440px;
+	overflow:auto;
+}
+.goods_li{
+	display:block;
+	width:90%; height: 120px;
+	margin: 20px auto;
+	border: 1px solid #bbb;
+	box-shadow:0 0 3px #eee;
+	padding:10px;
+}
+.goodsList input[type=checkbox]{display:none;}
+.goodsList input[type=checkbox]:checked + .goods_li{
+	background:#121212;
+	color:white;
+}
+.goods_li>p{
+	margin: 10px 10px;
+	display:flex;
+	flex-direction:row-reverse;
+	justify-content:space-between;
+	align-items:center;
+}
+.goods_li>p>span{
+	display:inline-block;
+}
+
+.purchaseArea{	
+	width: 399px; height:240px;
+	border:1px solid #121212;
+	box-shadow:0 0 3px #999;
+	position:relative;
+	padding:20px;
+}
+.purchaseArea>h1{
+	width:100%; height:60px;
+	line-height:60px;
+	background:#121212;
+	color:white;
+	font-size:35px;
+	position:absolute;
+	top:0; left:0;
+	text-align:center;
+}
+.purchaseArea>input[type=text]{
+	border:0;
+	width:100%; height: 40px;
+	text-align:left;
+	font:25px mbng;
+	cursor:default;
+	margin-top:60px;
+}
+.purchaseArea>input[type=text]:focus{
+	outline:none;
+}
+.purchaseArea>p{
+	width:100%; height: 50px;
+	font:20px mbng;
+	display:flex;
+	justify-content:right;
+	align-items:flex-end;
+}
+.purchaseArea>input[type=submit]{
+	border:0;
+	width:100%; height: 50px;
+	font-size:25px;
+	position:absolute;
+	bottom:0; left:0;
+	background:#121212;
+	color:white;
+	cursor:pointer;
+}
+.purchaseArea>input[type=submit]:hover{
+	background:black;
 }

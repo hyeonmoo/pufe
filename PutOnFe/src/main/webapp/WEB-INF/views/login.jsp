@@ -13,7 +13,7 @@
 </head>
 <body>
     <div id="container">
-        <img src="${path }/resources/img/logo_main.png" alt="logo">
+        <a href="<c:url value='/'/>"><img src="${path }/resources/img/logo_main.png" alt="logo" ></a>
         <form action="<c:url value='/login'/>" method="post">
             <h1>로그인</h1>
             <input type="email" name="email" id="email" placeholder="이메일" value="${empty param.email?cookie.email.value:param.email }" required>

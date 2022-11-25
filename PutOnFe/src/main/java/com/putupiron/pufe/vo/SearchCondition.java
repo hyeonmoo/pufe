@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchCondition {
 	private Integer page=1;
-	private Integer pageSize=15;
+	private Integer pageSize=15; 
 	private String keyword="";
 	private String option;
 	

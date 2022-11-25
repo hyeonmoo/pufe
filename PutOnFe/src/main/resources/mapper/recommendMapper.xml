@@ -4,7 +4,8 @@
 <mapper namespace="com.putupiron.recommend">
 	<!-- sql문 설정 -->
 	<sql id="select">
-		select * from recommend
+		select recommend.*, username.name as user_name
+		from recommend left join username on username.email=recommend.user_email
 	</sql>
 	<sql id="option">
 		<choose>
@@ -22,9 +23,13 @@
 	
 	<!-- 매핑 -->
 	<select id="read" parameterType="int" resultType="Recommend">
-		select * from recommend where rec_num=#{rec_num}
+		<include refid="select"/> where rec_num=#{rec_num}
+	</select>
+	<select id="indexrec"  resultType="Recommend">
+	SELECT rec_num,rec_title  FROM recommend order by rec_num desc limit 4
 	</select>
 	<delete id="remove" parameterType="map">
+	
 		delete from recommend where rec_num=#{rec_num} and user_email=#{user_email}
 	</delete>
 	<insert id="write" parameterType="Recommend">
@@ -45,4 +50,9 @@
 	<select id="searchCnt" parameterType="SearchCondition" resultType="int">
 		select count(*) from recommend where true <include refid="option"/>
 	</select>
+	<update id="updateCommentCnt" parameterType="map">
+		update recommend
+		set comment_cnt = comment_cnt+ #{comment_cnt}
+		where rec_num = #{rec_num}
+	</update>
 </mapper>

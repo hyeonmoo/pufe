@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.putupiron.pufe.dto.BigThree;
 import com.putupiron.pufe.dto.JoinData;
+import com.putupiron.pufe.dto.Statistics;
+import com.putupiron.pufe.dto.TrainerInfo;
+import com.putupiron.pufe.dto.TrainerView;
 import com.putupiron.pufe.dto.User;
 import com.putupiron.pufe.dto.UserView;
 
@@ -78,5 +81,43 @@ public class UserDao_imp implements UserDao {
 	@Override
 	public List<UserView> allUserView() throws Exception {
 		return session.selectList(namespace+"selectAllUserView");
+	}
+	@Override
+	public UserView homeUserView(String email) throws Exception {
+		return session.selectOne(namespace+"homeUserView",email);
+	}
+	@Override
+	public int big3Edit(BigThree big3) throws Exception {
+		return session.update(namespace+"big3Edit",big3);
+	}
+	@Override
+	public List<TrainerView> allTrainerView() throws Exception {
+		return session.selectList(namespace+"selectAllTrainer");
+	}
+	@Override
+	public List<UserView> allAdminView() throws Exception {
+		return session.selectList(namespace+"selectAllAdmin");
+	}
+	@Override
+	public Statistics statistics() throws Exception {
+		return session.selectOne(namespace+"statistics");
+	}
+	@Override
+	public int changeUserType(String user_email, String user_type) throws Exception {
+		Map<String,String> map = new HashMap<>();
+		map.put("user_email", user_email);
+		map.put("user_type", user_type);
+		return session.update(namespace+"changeUserType",map);
+	}
+	@Override
+	public int changeTrainer(String user_email, String trainer) throws Exception {
+		Map<String,String> map= new HashMap<>();
+		map.put("user_email", user_email);
+		map.put("trainer", trainer);
+		return session.update(namespace+"changeTrainer",map);
+	}
+	@Override
+	public List<TrainerInfo> TrainerUserView(String email) throws Exception {
+		return session.selectList(namespace+"selectTrainerUsers", email);
 	}
 }

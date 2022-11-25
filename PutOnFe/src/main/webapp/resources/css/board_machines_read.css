@@ -1,0 +1,50 @@
+.container{
+	width:900px;
+	margin: 100px auto 0 auto;
+}
+.container>h1{
+	width:100%;
+	text-align:center;
+	font-size:40px;
+	margin:20px auto;
+	
+}
+.container>table{
+	width:100%;
+	border-collapse:collapse;
+	margin-bottom: 20px;
+}
+
+.container th{
+	line-height : 40px;
+	color:white;
+	background-color:#121212;
+}
+
+.container td {
+	border-left:0; border-right:0;
+	text-align:center;
+	padding:15px 0;
+	background-color:#eee;
+}
+
+input{
+	border:0 solid black;
+	background-color:#eee;
+	text-align: center;
+	cursor:pointer;
+}
+textarea {
+	padding: 10px;
+	resize: none;
+	background-color: #eee;
+	border:none;
+}
+.button{
+	float:right;
+	margin-bottom:20px;
+	
+}
+input:focus {
+    outline: none;
+}

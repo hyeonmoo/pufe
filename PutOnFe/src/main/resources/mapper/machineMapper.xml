@@ -2,7 +2,54 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.putupiron.machine">
+
+
+<sql id="select">
+		select * from machines
+	</sql>
+	<sql id="option">
+		<choose>
+			<when test='option=="T"'>
+				and mch_num like concat('%',#{keyword},'%')
+			</when>
+			<when test='option=="C"'>
+				and mch_name like concat('%',#{keyword},'%')
+			</when>
+			<when test='option=="A"'>
+				and (mch_num like concat('%',#{keyword},'%') or mch_name like concat('%',#{keyword},'%'))
+			</when>
+		</choose>
+	</sql>
 	<select id="selectAllMachines" resultType="Machine">
 		select * from machines
+	</select>
+	
+	<delete id="remove" parameterType="map">
+		delete from machines where mch_num=#{mch_num}
+	</delete>
+	
+	<insert id="write" parameterType="Machine">
+		insert into machines (mch_num, mch_name, mch_img, mch_serial, mch_date, mch_info, mch_detail) values (#{mch_num}, #{mch_name}, #{mch_img}, #{mch_serial}, #{mch_date}, #{mch_info}, #{mch_detail})
+	</insert>
+
+	<update id="modify" parameterType="Machine">
+		update machines
+		set mch_name=#{mch_name}, mch_img =#{mch_img} ,mch_serial=#{mch_serial},mch_info=#{mch_info},mch_detail=#{mch_detail},mch_date=#{mch_date} where mch_num=#{mch_num}
+	
+		
+		
+	</update>
+	<select id="read" parameterType="int" resultType="Machine">
+		select * from machines where mch_num=#{mch_num}
+	</select>
+	
+	
+	<!-- 검색 기능 -->
+	<select id="search" parameterType="SearchCondition" resultType="Machine">
+		<include refid="select"/> where true <include refid="option"/>
+		order by mch_num desc limit #{offset},#{pageSize}
+	</select>
+	<select id="searchCnt" parameterType="SearchCondition" resultType="int">
+		select count(*) from machines where true <include refid="option"/>
 	</select>
 </mapper>
