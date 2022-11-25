@@ -14,6 +14,7 @@
 		<typeAlias alias="PTReserv" type="com.putupiron.pufe.dto.PTReserv"/>
 		<typeAlias alias="Rec_Comment" type="com.putupiron.pufe.dto.Rec_Comment"/>
 		<typeAlias alias="Goods" type="com.putupiron.pufe.dto.Goods"/>
+		<typeAlias alias="HealthMate" type="com.putupiron.pufe.dto.HealthMate"/>
 		
 		<typeAlias alias="SearchCondition" type="com.putupiron.pufe.vo.SearchCondition"/>
 	</typeAliases>

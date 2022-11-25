@@ -17,11 +17,8 @@
 <%@ include file="navMenu.jsp" %>
 
 <div class="container">
-
 <h1>추천 운동 정보</h1>
-
 	<table>
-	
 		<tr>
 			<th style="width: 10%;">번호</th>
 			<th style="width: 40%;">제목</th>
