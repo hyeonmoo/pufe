@@ -2,20 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.putupiron.healthmate">
+	<!-- 목록 -->
+	<select id="postList" resultType="HealthMate_Post">
+		select * from healthmate_post
+		order by post_no desc;
+	</select>
+	<!-- 조건(날짜,시간,파트)에 맞는 게시물 검색 -->
+	<select id="match" parameterType="HealthMate_Post" resultType="HealthMate_Post">
+		select * from healthmate_post
+		where part=#{part}, date=#{date}, time=#{time}
+		order by post_no desc;
+	</select>
 	<!-- 매칭 등록 -->
-	<insert id="post" parameterType="HealthMate">
-		insert into healthmate_matching values(,#{poster},#{part},#{date},#{time},1,null)
+	<insert id="post" parameterType="HealthMate_Post">
+		insert into healthmate_post
+		(poster,poster_name,poster_gender,poster_big3,part,date,time)
+		values
+		(#{poster},#{poster_name},#{poster_gender},#{poster_big3},#{part},#{date},#{time})
 	</insert>
 	<!-- 매칭 요청 -->
-	<update id="join" parameterType="HealthMate">
-		update healthmate_matching set status=2, partner=#{partner} where no=#{no}
+	<insert id="request" parameterType="HealthMate_Join">
+		insert into healthmate_join
+		(post_no, requester, req_name, req_gender, req_big3)
+		values
+		(#{post_no},#{requester},#{req_name},#{req_gender},#{req_big3})
+	</insert>
+	<!-- 매칭 요청 취소 -->
+	<delete id="requestCancel" parameterType="int">
+		delete from healthmate_join
+		where join_no=#{join_no}
+	</delete>
+	<!-- 포스트 매칭요청 수 갱신 -->
+	<update id="requests" parameterType="HealthMate_Post">
+		update healthmate_post set requests=#{requests}
+		where post_no=#{post_no}
 	</update>
-	<!-- 요청 응답 -->
-	<update id="answer" parameterType="HealthMate">
-		update healthmate_matching set status=#{status} where no=#{no}
-	</update>
-	<!-- 목록 -->
-	<select id="list" resultType="HealthMate">
-		select * from healthmate_matching
+	<!-- 매칭 요청 목록 -->
+	<select id="requestList" parameterType="int" resultType="HealthMate_Join">
+		select * from healthmate_join
+		where post_no=#{post_no}
+		order by join_no desc;
 	</select>
+	<!-- 요청 응답-승낙 -->
+	<update id="join" parameterType="HealthMate_Join">
+		update healthmate_post set partner=#{requester}
+		where post_no=#{post_no}
+	</update>	
 </mapper>

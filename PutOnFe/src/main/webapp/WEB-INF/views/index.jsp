@@ -64,7 +64,7 @@
 			</div>
 			<div class="contents slide">
 				<c:forEach items="${machineList}" var="machine">
-					<img src="${path}/resources/img/${machine.mch_img }">
+					<img src="${path}/resources/img/${machine.mch_img}">
 			   	</c:forEach>
 			    <button id="prev">&lang;</button>
 			    <button id="next">&rang;</button>
@@ -98,7 +98,7 @@
 					<c:otherwise>
 					<form action="" method="get" id="matching_join">
 						<input type="date" name="m_date" required>
-						<input type="text" class="timepicker" required>
+						<input type="text" class="timepicker" placeholder="시간선택" required>
 						<select name="part" required>
 							<option style="display:none;" value="" selected>부위</option>
 							<option value="chest">가슴</option>
@@ -144,7 +144,6 @@ $("input.timepicker").timepicker({
 	interval:30,
 	minTime:'06:00',
 	maxTime:'22:00',
-	defaultTime:'06:00',
 	dynamic:false,
 	dropdown:true,
 	scrollbar:true
