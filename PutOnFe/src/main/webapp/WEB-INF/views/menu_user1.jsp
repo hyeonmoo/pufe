@@ -27,7 +27,7 @@
 				<input type="checkbox" value="${goods.goods_name}" id="${goods.goods_no}">
 				<label class="goods_li" for="${goods.goods_no}">
 					<p>
-						<span style="font:20px mbng;" class="goods_price">${goods.price}0000</span>
+						<span style="font:20px mbng;" class="goods_price">${goods.price}</span>
 						<span style="font:25px mbng;" class="goods_name">기간권 ${goods.goods_name}</span>
 					</p>
 					<p style="font:15px mbng;text-align:right;">${goods.period*30}일<c:if test="${goods.PT}"> + PT ${goods.times}회</c:if></p>
@@ -46,7 +46,12 @@
 </div>
 <script>
 $(".goods_price").each(function(index,item){
-	$(item).text(parseInt($(item).text()).toLocaleString()+" 원");
+	price = $(item).text()*10000;
+	formatter = new Intl.NumberFormat('ko',{
+		style:'currency',
+		currency: 'krw',
+	});
+	$(item).text(formatter.format(price));
 });
 
 $("input[type=checkbox]").click(function(){

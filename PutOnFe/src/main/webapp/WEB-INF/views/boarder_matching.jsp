@@ -15,35 +15,36 @@
 <body>
 <%@ include file="navMenu.jsp" %>
 <div class="container">
-	<nav id="nav">
-		<h4>기간 :</h4>
-		<button id="button">전체</button>
-		<button id="button2">주말</button>
-		<button id="bt3">이번주</button>
-		<button>다음주</button>
-	</nav>
-	<table>
-		<thead>
-		<tr>
-			<th>DATE</th>
-			<th>TIME</th>
-			<th>PART</th>
-			<th>NAME</th>
-			<th>STATUS</th>
-		</tr>
-		</thead>
-	</table>
+	<div class="myPosts">
+		
+	</div>
+	<div class="myRequests">
+	
+	</div>
+	<div>
+		<nav class="part">
+			<a>전체</a>
+			<a>가슴</a>
+			<a>등</a>
+			<a>하체</a>
+		</nav>
+		<nav class="date">
+			<a>전체</a>
+			<a>오늘+내일</a>
+			<a>이번 주</a>
+			<a>이번 주 말</a>
+			<a>다음 주</a>
+			<a>다음 주 말</a>
+			<a>날짜 선택</a>
+		</nav>
+		<nav class="time">
+			<a>전체</a>
+			<a>09:00~12:00</a>
+			<a>12:00~18:00</a>
+			<a>18:00~22:30</a>
+			<a>시간대 선택</a>
+		</nav>
+	</div>
 </div>
-<script>
-let loginuser = "${loginman}";
-if(loginuser=="kang0825@naver.com"){
-	$("#button").show();
-} else{
-	$("#button2").toggle();
-}
-$("#bt3").click(function(){
-	$(this).parent().find("#button").toggle();
-});
-</script>
 </body>
 </html>
