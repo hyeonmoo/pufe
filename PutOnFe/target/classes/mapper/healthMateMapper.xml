@@ -3,16 +3,18 @@
 
 <mapper namespace="com.putupiron.healthmate">
 	<!-- 목록 -->
-	<select id="postList" resultType="HealthMate_Post">
+	<select id="postList" parameterType="MatchCondition" resultType="HealthMate_Post">
 		select * from healthmate_post
-		order by post_no desc;
+		where partner is null <if test="part!='all'">and part=#{part}</if>
+		and (#{startDate} &lt;= date and date &lt; #{endDate})
+		and (#{startTime} &lt;= time and time &lt;= #{endTime})
+		order by date asc, time asc, poster_big3 desc, post_no desc;
 	</select>
-	<!-- 조건(날짜,시간,파트)에 맞는 게시물 검색 -->
-	<select id="match" parameterType="HealthMate_Post" resultType="HealthMate_Post">
-		select * from healthmate_post
-		where part=#{part}, date=#{date}, time=#{time}
-		order by post_no desc;
-	</select>
+	<!-- 포스트 매칭요청 수 갱신 -->
+	<update id="requests" parameterType="HealthMate_Post">
+		update healthmate_post set requests=#{requests}
+		where post_no=#{post_no}
+	</update>
 	<!-- 매칭 등록 -->
 	<insert id="post" parameterType="HealthMate_Post">
 		insert into healthmate_post
@@ -27,25 +29,50 @@
 		values
 		(#{post_no},#{requester},#{req_name},#{req_gender},#{req_big3})
 	</insert>
+	<!-- 매칭 등록 취소 -->
+	<delete id="deletePost" parameterType="int">
+		delete from healthmate_post
+		where post_no=#{post_no}
+	</delete>
 	<!-- 매칭 요청 취소 -->
 	<delete id="requestCancel" parameterType="int">
 		delete from healthmate_join
 		where join_no=#{join_no}
 	</delete>
-	<!-- 포스트 매칭요청 수 갱신 -->
-	<update id="requests" parameterType="HealthMate_Post">
-		update healthmate_post set requests=#{requests}
-		where post_no=#{post_no}
-	</update>
 	<!-- 매칭 요청 목록 -->
 	<select id="requestList" parameterType="int" resultType="HealthMate_Join">
 		select * from healthmate_join
 		where post_no=#{post_no}
 		order by join_no desc;
 	</select>
-	<!-- 요청 응답-승낙 -->
-	<update id="join" parameterType="HealthMate_Join">
+	<!-- 자신이 등록한 매칭 목록 -->
+	<select id="myPost" parameterType="String" resultType="HealthMate_Post">
+		select healthmate_post.*, username.name as partner_name
+		from healthmate_post left join username
+		on healthmate_post.partner=username.email
+		where healthmate_post.poster=#{poster}
+		order by post_no desc
+	</select>
+	<!-- 자신의 요청 목록 -->
+	<select id="myRequest" parameterType="String" resultType="HealthMate_Post">
+		select P.*, J.join_no, J.requester, J.status
+		from healthmate_post as P inner join healthmate_join as J on P.post_no=J.post_no
+		where requester=#{requester}
+		order by join_no desc
+	</select>
+	<!-- 매칭 완료 -->
+	<update id="confirm" parameterType="HealthMate_Join">
 		update healthmate_post set partner=#{requester}
 		where post_no=#{post_no}
-	</update>	
+	</update>
+	<!-- 매칭 완료된 요청 표시 -->
+	<update id="joinStatus" parameterType="int">
+		update healthmate_join set status="matched"
+		where join_no=#{join_no}
+	</update>
+	<!-- 매칭 완료시 해당 포스트의 모든 요청 삭제 -->
+	<delete id="deleteAllRequestsOfConfirmedPost" parameterType="int">
+		delete from healthmate_join
+		where post_no=#{post_no} and not(status="matched")
+	</delete>
 </mapper>

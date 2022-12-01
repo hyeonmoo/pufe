@@ -1,6 +1,175 @@
+@font-face {
+    font-family: mbng;
+    src: url(../fonts/Mabinogi_Classic_OTF.woff);
+}
 .container{
-	width:1200px;
+	width:1000px;
 	margin: 100px auto 0 auto;
-	display:flex;
-	flex-direction:column;
+	display:grid;
+	grid-template-columns: repeat(2,1fr);
+	grid-auto-rows: minmax(100px,auto);
+	grid-template-areas:
+		"result post"
+		"myPost myRequest"
+		"list list";
+}
+.container *{font-family:mbng;}
+.container>div:nth-child(1){grid-area:result;}
+.container>div:nth-child(2){grid-area:post;}
+.container>div:nth-child(3){grid-area:myPost;}
+.container>div:nth-child(4){grid-area:myRequest;}
+.container>div:nth-child(5){grid-area:list;}
+.container>div{
+	margin:10px;
+	padding:10px;
+	background:#fff;
+	border-radius:10px;
+	box-shadow:0 0 5px #121212;
+}
+.container h4{
+	font:25px mkpB;
+	margin:10px 5px;
+}
+.container table{
+	border-collapse:collapse;
+	width:100%;
+}
+.container tr{
+	display:grid;
+	grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+}
+.container tbody tr{
+	border-bottom:1px solid #eee;
+}
+.container tbody tr:last-child{
+	border-bottom:2px solid #121212;
+}
+.container th, .container td{
+	font:1em mbng;
+	text-align:center;
+	line-height:30px;
+	cursor:default;
+}
+.container th{
+	font-size:1.1em;
+	background:#121212;
+	color:white;
+}
+.container td{
+	color:#121212;
+	background:white;
+	position:relative;
+}
+.container input[type=text]:not(.post_){
+	width:100%; height:90%;
+	font:1em mbng;
+	border:none;
+	outline:none;
+	text-align:center;
+}
+.time.picker{
+	width:49% !important;
+}
+.flatpickr-calendar *, .ui-timepicker *{
+	font-family:mbng;
+}
+.part, .date, .time{
+	cursor:pointer !important;
+}
+.part:hover, .date:hover, .time:hover{
+	text-decoration:underline;
+}
+.checked{
+	background:#121212 !important;
+	color:#fff !important;
+}
+.checked:hover{text-decoration:none;}
+.allPosts{
+	min-height:400px;
+}
+.container form{
+	width:100%; height:60px;
+	display: grid;
+	grid-template-columns:repeat(4,1fr);
+	padding:10px;
+	box-shadow:0 0 3px #121212;
+	border-radius:10px;
+	background:white;
+}
+.container form *{
+	margin:0 auto;
+	width:90%;
+	height:40px;
+	background:white;
+	text-align:center;
+	font:15px/1 mbng;
+	border:2px solid #121212;
+	outline:none;
+	border-radius:10px;
+	cursor:default;
+}
+.container form input[type=button]{
+	background:#121212;
+	color:white;
+	font-size:18px;
+	cursor:pointer;
+}
+.x-mark{
+	position:absolute;
+	right:0; top:0;
+	font-weight:900;
+	font-size:30px;
+	cursor:pointer;
+	display:none;
+}
+.j-mark{
+	position:absolute;
+	right:5px; top:5px;
+	cursor:pointer;
+	display:none;
+	width:20px; height:20px;
+	background: url(../img/join.png) no-repeat center center;
+	background-size:100% 100%;
+}
+.contents>tr:hover .x-mark{
+	display:inline-block;
+}
+#postList>tr:hover .j-mark{
+	display:inline-block;
+}
+.requests{
+	cursor:pointer;
+	display:inline-block;
+	font-family:mbng;
+}
+.requests:hover{
+	transform:scale(110%);
+	color:#888;
+}
+#postList>tr:hover{
+	background:#eee;
+}
+.myPostRequests{
+	width: 100%;
+	margin:0 auto;
+	padding: 10px 20px;
+	background:#eee;
+}
+.myPostRequests th{
+	font-size:0.9em;
+	background: #373737;
+	color: #fff;
+}
+.myPostRequests td{
+	font-size:0.9em;
+	background: #fff;
+}
+.textBt{
+	display:inline-block;
+	font: 0.9em mbng;
+	cursor:pointer;
+}
+.textBt:hover{
+	transform:scale(110%);
+	transition:0.1s;
 }

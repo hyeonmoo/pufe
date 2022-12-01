@@ -10,4 +10,5 @@ public class HealthMate_Join {
 	private	String	req_name;
 	private	String	req_gender;
 	private	Integer	req_big3;
+	private	String	status;
 }

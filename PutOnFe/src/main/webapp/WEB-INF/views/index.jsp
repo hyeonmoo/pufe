@@ -9,10 +9,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>철좀들어</title>
-    <link rel="stylesheet" href="${path}/resources/css/index.css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <link rel="stylesheet" href="${path}/resources/css/index.css">
 </head>
 <body>
 <div id="container">
@@ -88,7 +88,7 @@
         <div class="article hasbar">
             <div class="top_bar">
                 <p>헬스 메이트</p>
-                <a href="<c:url value='/matching'/>">더보기</a>
+                <a href="<c:url value='/healthmate'/>">더보기</a>
 			</div>
 			<div class="contents form">
 				<c:choose>
@@ -96,9 +96,9 @@
 						로그인 후 이용 가능합니다.
 					</c:when>
 					<c:otherwise>
-					<form action="" method="get" id="matching_join">
-						<input type="date" name="m_date" required>
-						<input type="text" class="timepicker" placeholder="시간선택" required>
+					<form action="<c:url value='/matching'/>" method="post" id="matching_join" autocomplete="off">
+						<input type="date" name="dateOption" required>
+						<input type="text" name="timeOption" class="timepicker" placeholder="시간선택" required>
 						<select name="part" required>
 							<option style="display:none;" value="" selected>부위</option>
 							<option value="chest">가슴</option>

@@ -17,5 +17,6 @@
 		<typeAlias alias="HealthMate_Post" type="com.putupiron.pufe.dto.HealthMate_Post"/>
 		<typeAlias alias="HealthMate_Join" type="com.putupiron.pufe.dto.HealthMate_Join"/>
 		<typeAlias alias="SearchCondition" type="com.putupiron.pufe.vo.SearchCondition"/>
+		<typeAlias alias="MatchCondition" type="com.putupiron.pufe.vo.MatchCondition"/>
 	</typeAliases>
 </configuration>

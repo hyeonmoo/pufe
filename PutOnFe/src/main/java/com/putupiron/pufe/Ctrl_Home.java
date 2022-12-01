@@ -10,17 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.putupiron.pufe.dao.GoodsDao;
+import com.putupiron.pufe.dao.HealthMateDao;
 import com.putupiron.pufe.dao.MachineDao;
 import com.putupiron.pufe.dao.PTDao;
 import com.putupiron.pufe.dao.RecommendDao;
 import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.BigThree;
+import com.putupiron.pufe.dto.HealthMate_Post;
 import com.putupiron.pufe.dto.Machine;
 import com.putupiron.pufe.dto.PTReserv;
 import com.putupiron.pufe.dto.Recommend;
 import com.putupiron.pufe.dto.User;
+import com.putupiron.pufe.vo.MatchCondition;
 import com.putupiron.pufe.vo.PageHandler;
 import com.putupiron.pufe.vo.SearchCondition;
 
@@ -31,6 +35,7 @@ public class Ctrl_Home {
 	@Autowired RecommendDao recDao;
 	@Autowired PTDao ptDao;
 	@Autowired GoodsDao goodsDao;
+	@Autowired HealthMateDao hMateDao;
 
 //	홈 화면
 	@GetMapping("/")
@@ -44,8 +49,7 @@ public class Ctrl_Home {
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 
-		if (user == null)
-			return "index";
+		if(user == null) return "index";
 		Integer user_rank = userDao.userBig3Rank(user_email);
 		switch (user.getUser_type()) {
 		case "A":
@@ -60,7 +64,6 @@ public class Ctrl_Home {
 		}
 		m.addAttribute("user", user);
 		m.addAttribute("rank", user_rank);
-
 		return "index";
 	}
 
@@ -202,15 +205,41 @@ public class Ctrl_Home {
 		return "bigThree";
 	}
 
-//	헬스메이트 매칭
-	@GetMapping("/matching")
-	public String matching(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+//	헬스메이트 매칭-더보기
+	@GetMapping("/healthmate")
+	public String healthmate(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
 		User user = navBar(session, m, hsReq);
 		if (user == null)
 			return "redirect:/login";
+		m.addAttribute("myPosts",hMateDao.myPosts(user.getUser_email()));
+		m.addAttribute("myRequests",hMateDao.myRequests(user.getUser_email()));
+		m.addAttribute("postList",hMateDao.postList());
 		return "boarder_matching";
 	}
-
+//	헬스메이트 매칭-매칭버튼
+	@PostMapping("/matching")
+	public String matching(MatchCondition mc,HttpSession session, Model m, HttpServletRequest hsReq) throws Exception{
+		User user = navBar(session,m,hsReq);
+		mc.setDatePeriod(mc.getDateOption());
+		mc.setTimePeriod(mc.getTimeOption());
+		int userBig3=user.getSquat()+user.getBenchpress()+user.getDeadlift();
+		List<HealthMate_Post> hmpList = hMateDao.postList(mc);
+		HealthMate_Post recommendedPost=null;
+		if(hmpList.size()!=0) {
+			hmpList.removeIf(hmp->hmp.getPoster().equals(user.getUser_email())); //ArrayList 안의 해당 람다식조건을 만족하는 요소 제거
+			for(HealthMate_Post hmp:hmpList) hmp.setPoster_big3(hmp.getPoster_big3()-userBig3);
+			boolean hasPositive=false;
+			for(HealthMate_Post hmp:hmpList) if(hmp.getPoster_big3()>=0) hasPositive=true;
+			if(hasPositive) {
+				hmpList.removeIf(hmp->hmp.getPoster_big3()<0);
+				recommendedPost=hmpList.get(hmpList.size()-1);
+			} else recommendedPost=hmpList.get(0);
+			recommendedPost.setPoster_big3(recommendedPost.getPoster_big3()+userBig3);
+		}
+		m.addAttribute("mc",mc);
+		m.addAttribute("recommend",recommendedPost);
+		return healthmate(session,m,hsReq);
+	}
 //	오시는 길
 	@GetMapping("/road")
 	public String road(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
