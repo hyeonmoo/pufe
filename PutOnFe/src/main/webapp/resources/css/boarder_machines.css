@@ -87,16 +87,16 @@ li {list-style:none;}
 textarea:focus {
     outline: none;
 }
-.product_con ::-webkit-scrollbar{
-   width:8px;
+
+::-webkit-scrollbar {
+	width: 12px;
 }
-.product_con ::-webkit-scrollbar-thumb{
-   background:#121212;
-   border-radius:4px;
+
+::-webkit-scrollbar-thumb {
+	background: #121212;
+	border-radius: 6px;
 }
-.product_con::-webkit-scrollbar-track{
-   background:white;
-}
-.detail:hover{
-	
+
+::-webkit-scrollbar-track {
+	background: #eee;
 }
