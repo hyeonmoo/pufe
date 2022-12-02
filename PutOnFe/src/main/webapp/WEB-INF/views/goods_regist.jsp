@@ -19,18 +19,18 @@
 				
 				<label class="goods_li2" for="${goods.goods_no}">
 				<input type="hidden"name="goods_no" value="${goods.goods_no}">
-					<input style="width:120px;font:25px mbng;float:left;" class="goods_name" name="goods_name" value="${goods.goods_name}">
+					<input style="width:120px;font:25px mbng;float:left;" class="goods_name" name="goods_name" value="${goods.goods_name}" >
 						
 					
 						
 					
 						<br><br><br><br><br>
 					<div class="divb">
-						<input style="font:15px mbng;width:30px;" name="price" value="${goods.price }"><a style="font:15px mbng; ">만원</a>
+						<input style="font:15px mbng;width:30px;"class="goods_price" name="price" value="${goods.price }"><a style="font:15px mbng; ">만원</a>
 						
 						
 					
-						<input style="font:15px mbng;" name="period" value="${goods.period}"><a style="font:15px mbng; ">개월</a>	
+						<input style="font:15px mbng;" class="goods_period" name="period" value="${goods.period}"><a style="font:15px mbng; ">개월</a>	
 						<input style="font:15px mbng;"type="checkbox" name="PT" value="1"id="input_check" ${goods.PT ? 'checked' : '' }  class="input_check"><a style="font:15px mbng; ">PT</a>				
 						<input style="font:15px mbng;"class="pt2" name="times" value="${goods.times }" type="${goods.PT ? 'text' : 'hidden' }"><input readonly class="pt3" style="font:15px mbng;"type="${goods.PT ? 'text' : 'hidden' }" value="회">
 					</div>
@@ -50,6 +50,12 @@
 </div>
 <script>
 document.getElementById("writeBt").addEventListener('click',e=>{
+	
+	if($('.goods_name').val().length==0||$('.goods_period').val().length==0||$('.goods_price').val().length==0)
+	{
+		alert("내용을 모두 입력하세요");
+		return false;
+	}
 	
 	if(!confirm("게시물을 등록하시겠습니까?")) return;
 	

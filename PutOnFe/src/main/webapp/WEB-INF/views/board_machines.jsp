@@ -52,7 +52,7 @@
 		
 		
 		<div class="search-container">
-			<form action="<c:url value="/test"/>" class="search-form" method="get">
+			<form action="<c:url value="/menu2"/>" class="search-form" method="get">
 				<select class="form-control" name="option">
 					<option value="A" ${ph.sc.option=='A' || ph.sc.option=='' ? "selected":""}>번호+이름</option>
 					<option value="T" ${ph.sc.option=='T'? "selected":""}>번호</option>
