@@ -73,7 +73,7 @@ public class Ctrl_Healthmate {
 		}
 	}
 //	매칭 포스팅
-	@PostMapping(value= "/post", produces= "application/json; charset=utf8")
+	@PostMapping(value="/post", produces="application/text;charset=utf-8")
 	public ResponseEntity<String> post(@RequestBody HealthMate_Post hmp, HttpSession session) {
 		try {
 			User user = navBar(session);
@@ -83,27 +83,27 @@ public class Ctrl_Healthmate {
 			hmp.setPoster_big3(user.getSquat()+user.getBenchpress()+user.getDeadlift());
 			if(hMateDao.post(hmp)!=1) throw new Exception("post 에러");
 			refreshRequests();
-			return new ResponseEntity<>("매칭이 등록되었습니다.",HttpStatus.OK);
+			return new ResponseEntity<>("매칭을 등록했습니다.",HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 //	포스팅 or 요청 삭제
-	@DeleteMapping(value= "/delete", produces= "application/json; charset=utf8")
+	@DeleteMapping(value= "/delete", produces="application/text;charset=utf-8")
 	public ResponseEntity<String> delete(Integer post_no, Integer join_no){
 		try {
 			if(post_no!=null) if(hMateDao.deletePost(post_no)!=1) throw new Exception("에러가 발생했습니다.");
 			if(join_no!=null) if(hMateDao.requestCancel(join_no)!=1) throw new Exception("에러가 발생했습니다.");
 			refreshRequests();
-			return new ResponseEntity<>("성공적으로 삭제했습니다.",HttpStatus.OK);
+			return new ResponseEntity<>("삭제했습니다.",HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 //	매칭 요청
-	@PostMapping(value= "/request", produces= "application/json; charset=utf8")
+	@PostMapping(value= "/request", produces="application/text;charset=utf-8")
 	public ResponseEntity<String> request(@RequestBody HealthMate_Join hmj, HttpSession session){
 		try {
 			User user = navBar(session);
@@ -121,7 +121,7 @@ public class Ctrl_Healthmate {
 		}
 	}
 //	매칭 확정
-	@PatchMapping(value="/confirm", produces="application/json; charset=utf8")
+	@PatchMapping(value="/confirm", produces="application/text;charset=utf-8")
 	public ResponseEntity<String> confirm(@RequestBody HealthMate_Join hmj){
 		try {
 			if(hMateDao.confirm(hmj)!=1) throw new Exception("confirm 에러");

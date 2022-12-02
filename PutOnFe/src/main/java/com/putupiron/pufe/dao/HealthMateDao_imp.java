@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.putupiron.pufe.dto.HealthMate_Join;
 import com.putupiron.pufe.dto.HealthMate_Post;
 import com.putupiron.pufe.vo.MatchCondition;
+import com.putupiron.pufe.vo.MyMatch;
 
 @Repository
 public class HealthMateDao_imp implements HealthMateDao {
@@ -82,5 +83,10 @@ public class HealthMateDao_imp implements HealthMateDao {
 	@Override
 	public int deleteAllRequestsOfConfirmedPost(int post_no) {
 		return session.delete(namespace+"deleteAllRequestsOfConfirmedPost",post_no);
+	}
+//	해당 유저의 완료된 매칭 조회(시간순)
+	@Override
+	public List<MyMatch> confirmedPostOfUser(String email) {
+		return session.selectList(namespace+"confirmedPostOfUser",email);
 	}
 }

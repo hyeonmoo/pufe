@@ -134,18 +134,19 @@ li{list-style: none;}
 	color:#121212;
 	cursor:default;
 	padding-top:4px;
+	outline:0;
 }
 .contents.form form>input[type=date]{
-	width: 260px;
+	width: 240px;
 }
 .contents.form form>input[type=text]{
-	width: 120px;
+	width: 110px;
 }
 .contents.form form>select{
-	width: 120px;
+	width: 110px;
 }
 .contents.form form>input[type=submit]{
-	width: 260px;
+	width: 240px;
 	background:#121212;
 	color:white;
 	border:2px solid white;
@@ -154,9 +155,6 @@ li{list-style: none;}
 }
 .contents.form form>input[type=submit]:hover{
 	transform:scale(101%);
-}
-.contents.form form>input:not([type=submit]):focus{
-	outline:0;
 }
 
 ::-webkit-calendar-picker-indicator{
@@ -242,7 +240,7 @@ li{list-style: none;}
     transform:translate(-50%,-50%) scale(110%);
 }
 .userInfo>img{
-	margin:25px auto;
+	margin:25px auto 20px auto;
 	display:block;
 	width:180px; height:160px;
 	border:1px solid white;
@@ -286,26 +284,46 @@ li{list-style: none;}
 .admin p:first-child>span{font-size:1em;}
 .admin p>span:first-child{text-align:left;}
 .admin p>span:last-child{text-align:right;}
+
 /* 트레이너 화면 */
-.trainer{
-	width:180px; height:300px;
-	margin:25px auto;
+div.trainer{
+	width:180px; height:330px;
+	margin:25px auto 0 auto;
+	display:grid;
+	grid-template-rows:80px 250px;
 }
-.trainer p{
+div.trainer>div{width:100%;}
+div.trainer>div:first-child{
 	display:flex;
-	justify-content:space-between;
-	margin-bottom:2px;
+	flex-direction:row;
+	flex-wrap:wrap;
+	align-content: space-around;
 }
-.trainer p>span{
+div.trainer>div:first-child>p{
+	width:50%; height:20px;
+	line-height:20px;
+}
+div.trainer>div:first-child>p:nth-child(even){text-align:right;}
+div.trainer>div:last-child{
+	display:grid;
+	width:100%;
+	grid-template-rows: repeat(auto-fit,minmax(15px,1fr));
+	padding-top:10px;
+    align-items: center;
+}
+div.trainer>div:last-child>p{
+	width:100%;
+	display:grid;
+	grid-template-columns:30% auto;
+	align-items:center;
+}
+div.trainer>div:last-child>p>span{
 	display:inline-block;
-	width:70px;
-	font-size:0.9em;
+	text-align:right;
+	font-size:0.8em;
 }
-.trainer p:first-child>span, .trainer p:nth-child(2)>span{font-size:1em;}
-.trainer p:nth-child(-n+3){margin-bottom:6px;}
-.trainer p>span:first-child{text-align:left;}
-.trainer p>span:last-child{text-align:right;}
-.trainer p:nth-child(n+4)>span:first-child{width:100px;text-align:right;}
+div.trainer>div:last-child>p>span:last-child{
+}
 /* 일반유저 화면 */
 .user{
 	width:180px; height:130px;
@@ -320,4 +338,9 @@ li{list-style: none;}
 	display:flex;
 	justify-content:space-between;
 	margin-bottom:15px;
+}
+.user p font{
+	font:13px mbng;
+	position:relative;
+	top:-3px;
 }

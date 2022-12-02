@@ -205,7 +205,7 @@ $(document).on("click",".x-mark",function(){
 		beforeSend: function(){return confirm("정말 삭제하시겠습니까?");},
 		success: function(result){
 			alert(result);
-			location.replace("healthmate");
+			window.location.replace("healthmate");
 		},
 		error: function(e){alert(e.responseText);}
 	});
@@ -228,7 +228,7 @@ $(document).on("click",".postBt",function(){
 			alert(result);
 			location.replace("healthmate");
 		},
-		error: function(e){alert(e.responseText);}
+		error: function(e){alert(e);}
 	});
 });
 
@@ -423,7 +423,7 @@ $(document).on("click",".requestToPost",function(){
 		beforeSend:function(){return confirm("요청하시겠습니까?");},
 		success:function(result){
 			alert(result);
-			location.replace("healthmate");
+			window.location.replace("healthmate");
 		},
 		error:function(e){
 			alert(e.responseText);
@@ -443,7 +443,7 @@ $(document).on("click",".matchConfirm",function(){
 		beforeSend:function(){return confirm(name+"님과 매칭하시겠습니까?");},
 		success:function(result){
 			alert(result);
-			location.replace("healthmate");
+			window.location.replace("healthmate");
 		},
 		error:function(e){alert(e.responseText);}
 	});

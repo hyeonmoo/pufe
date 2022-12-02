@@ -75,4 +75,11 @@
 		delete from healthmate_join
 		where post_no=#{post_no} and not(status="matched")
 	</delete>
+	<!-- 해당 유저의 완료된 매칭을 날짜, 시간 순서대로 불러오기 -->
+	<select id="confirmedPostOfUser" parameterType="String" resultType="MyMatch">
+		select poster_name, part, date, time, username.name as partner_name
+		from healthmate_post inner join username on partner=email
+		where poster=#{email} or partner=#{email}
+		order by date, time, post_no;
+	</select>
 </mapper>

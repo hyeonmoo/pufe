@@ -5,6 +5,7 @@ import java.util.List;
 import com.putupiron.pufe.dto.HealthMate_Join;
 import com.putupiron.pufe.dto.HealthMate_Post;
 import com.putupiron.pufe.vo.MatchCondition;
+import com.putupiron.pufe.vo.MyMatch;
 
 public interface HealthMateDao {
 
@@ -31,4 +32,6 @@ public interface HealthMateDao {
 	int confirm(HealthMate_Join hmj);
 	int joinStatus(int join_no);
 	int deleteAllRequestsOfConfirmedPost(int post_no);
+//	해당 유저의 완료된 매칭 조회(시간순)
+	List<MyMatch> confirmedPostOfUser(String email);
 }

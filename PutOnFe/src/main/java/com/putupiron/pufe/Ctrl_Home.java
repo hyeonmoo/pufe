@@ -1,6 +1,9 @@
 package com.putupiron.pufe;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +22,15 @@ import com.putupiron.pufe.dao.PTDao;
 import com.putupiron.pufe.dao.RecommendDao;
 import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.BigThree;
+import com.putupiron.pufe.dto.Goods;
 import com.putupiron.pufe.dto.HealthMate_Post;
 import com.putupiron.pufe.dto.Machine;
 import com.putupiron.pufe.dto.PTReserv;
 import com.putupiron.pufe.dto.Recommend;
 import com.putupiron.pufe.dto.User;
+import com.putupiron.pufe.dto.UserView;
 import com.putupiron.pufe.vo.MatchCondition;
+import com.putupiron.pufe.vo.MyMatch;
 import com.putupiron.pufe.vo.PageHandler;
 import com.putupiron.pufe.vo.SearchCondition;
 
@@ -56,9 +62,23 @@ public class Ctrl_Home {
 			m.addAttribute("stats", userDao.statistics());
 			break;
 		case "T":
-			m.addAttribute("today", new java.util.Date());
+			List<UserView> myClientList = userDao.allUserView();
+			myClientList.removeIf(client->client.getTrainer()==null||!client.getTrainer().equals(user_email));
+			List<PTReserv> todayPTs = ptDao.reservList(user_email, user.getUser_type());
+			todayPTs.removeIf(pt->!pt.getPt_date().equals((LocalDate.now())));
+			m.addAttribute("clientNum",myClientList.size());
+			m.addAttribute("today",new Date());
+			m.addAttribute("todaySchedule",todayPTs);
 			break;
 		case "U":
+			List<MyMatch> myMatches = hMateDao.confirmedPostOfUser(user_email);
+			MyMatch myMatch = null;
+			myMatches.removeIf(each->(LocalDateTime.of(each.getDate(), each.getTime()).isBefore(LocalDateTime.now())));
+			if(myMatches.size()!=0) {
+				myMatch = myMatches.get(0);
+				myMatch.setName(myMatch.getPoster_name().equals(user.getUser_name())?myMatch.getPartner_name():myMatch.getPoster_name());
+			}
+			m.addAttribute("myMatch",myMatch);
 			m.addAttribute("userview", userDao.homeUserView(user_email));
 			break;
 		}
@@ -84,7 +104,9 @@ public class Ctrl_Home {
 			return "login";
 		switch (user.getUser_type()) {
 		case "U":
-			m.addAttribute("goodsList", goodsDao.allGoods("noPT"));
+			List<Goods> goodsList = goodsDao.allGoods("noPT");
+			for(Goods goods:goodsList) goods.setEnd_date(LocalDate.now().plusDays(goods.getPeriod()*30));
+			m.addAttribute("goodsList", goodsList);
 			return "menu_user1";
 		case "T":
 			m.addAttribute("tulist", userDao.TrainerUserView(user.getUser_email()));
