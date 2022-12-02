@@ -16,45 +16,48 @@
 <body>
 <%@ include file="navMenu.jsp" %>
 <div class="container">
-	<div class="goodsArea">
-		<div class="goodsNav">
+	<div>
+		<nav>
 			<a href="<c:url value='/goods?option=noPT'/>">기간권</a>
 			<a href="<c:url value='/goods?option=yesPT'/>">+PT</a>
-		</div>
-		<div class="goodsList">
+		</nav>
+		<ul>
 			<c:forEach var="goods" items="${goodsList}">
-			<div>
-				<input type="checkbox" value="${goods.goods_name}" id="${goods.goods_no}">
-				<label class="goods_li" for="${goods.goods_no}">
-					<p>
-						<span style="font:20px mbng;" class="goods_price">${goods.price}0000</span>
-						<span style="font:25px mbng;" class="goods_name">기간권 ${goods.goods_name}</span>
-					</p>
-					<p style="font:15px mbng;text-align:right;">${goods.period*30}일<c:if test="${goods.PT}"> + PT ${goods.times}회</c:if></p>
-					<p style="font:13px mbng;text-align:right;">지금 구매 시 2023-13-32일까지 이용 가능</p>
-				</label>
-			</div>
+				<li class="li_goods">
+					<input type="checkbox" value="${goods.goods_name}" id="${goods.goods_no}">
+					<label for="${goods.goods_no}">
+						<span>기간권 ${goods.goods_name}</span>
+						<span class="price">${goods.price}</span>
+						<span>${goods.period*30}일<c:if test="${goods.PT}"> + PT ${goods.times}회</c:if></span>
+						<span>지금 구매 시 ${goods.end_date }일까지 이용 가능</span>
+					</label>
+				</li>
 			</c:forEach>
-		</div>
+		</ul>
 	</div>
-	<form class="purchaseArea" action="<c:url value='/goods/purchase'/>" method="post" onsubmit="return purchase();">
+	<form action="<c:url value='/goods/purchase'/>" method="post" onsubmit="return purchase();">
 		<h1>상품구매</h1>
-		<input type="text" id="buying_goods_name" name="goods_name" readonly required>
-		<p id="buying_goods_price"></p>
+		<input type="text" name="goods_name" readonly required>
+		<p></p>
 		<input type="submit" value="구매하기" onsubmit="return purchase();">
 	</form>
 </div>
 <script>
-$(".goods_price").each(function(index,item){
-	$(item).text(parseInt($(item).text()).toLocaleString()+" 원");
+// 금액 원화로 치환
+$(".price").each(function(index,item){
+	price = $(item).text()*10000;
+	formatter = new Intl.NumberFormat('ko-KR',{
+		currencyDisplay:'name'
+	});
+	$(item).text(formatter.format(price)+"원");
 });
-
+// 상품 클릭 시 이벤트
 $("input[type=checkbox]").click(function(){
 	$("input[type=checkbox]").not($(this)).removeAttr("checked");
-	$("#buying_goods_name").val($(this).val());
-	$("#buying_goods_price").text($(this).parent().find(".goods_price").text());
+	$(".container>form>input[type=text]").val($(this).val());
+	$(".container>form>p").text($(this).next().find("span.price").text());
 });
-
+// 구매 확인창
 function purchase(){
 	if($("#buying_goods_name").val()==null){
 		alert("구입할 상품을 선택해주세요.");

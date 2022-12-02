@@ -52,7 +52,7 @@
 			<td>${user.pt_remain }</td>
 			<td>${user.big3 }
 				<button class="bt_edit"><img src="${path}/resources/img/icon_edit.png"></button>
-				<form class="editor" action="<c:url value='menu1/editBig3'/>" method="post">
+				<form class="editor" action="<c:url value='manage/editBig3'/>" method="post">
 					<input type="hidden" name="user_email" value="${user.user_email}">
 					<input type="text" name="squat" placeholder="스쾃:${user.squat }">
 					<input type="text" name="benchpress" placeholder="벤치:${user.benchpress }">

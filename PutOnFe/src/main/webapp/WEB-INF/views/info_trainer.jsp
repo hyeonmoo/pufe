@@ -3,30 +3,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 <div class="trainer">
-	<p>
-		<span>트레이너</span>
-		<span>${user.user_name }님</span>
-	</p>
-	<p><span>PT회원</span><span>${stats.trainer } 명</span></p>
-	<p><span>오늘일정</span><span><fmt:formatDate value="${today}" pattern="MM월 dd일" type="date"/></span></p>
-	<!--<c:forEach var="ptlist" begin="9" end="21" items="${ptlist}" varStatus="time">
-		<p><span>${time.index}:00</span><span>${stats.product } 님</span></p>
-	</c:forEach>-->
-	<p><span>09:00</span><span>강일반 님</span></p>
-	<p><span>10:00</span><span>강일반 님</span></p>
-	<p><span>11:00</span><span>강일반 님</span></p>
-	<p><span>12:00</span><span>강일반 님</span></p>
-	<p><span>13:00</span><span>강일반 님</span></p>
-	<p><span>14:00</span><span>강일반 님</span></p>
-	<p><span>15:00</span><span>강일반 님</span></p>
-	<p><span>16:00</span><span>강일반 님</span></p>
-	<p><span>17:00</span><span>강일반 님</span></p>
-	<p><span>18:00</span><span>강일반 님</span></p>
-	<p><span>19:00</span><span>강일반 님</span></p>
-	<p><span>20:00</span><span>강일반 님</span></p>
-	<p><span>21:00</span><span>강일반 님</span></p>
+	<div>
+		<p>트레이너</p>
+		<p>${user.user_name}님</p>
+		<p>PT회원</p>
+		<p>${clientNum}명</p>
+		<p>오늘일정</p>
+		<p><fmt:formatDate value="${today}" pattern="MM월 dd일" type="date"/></p>
+	</div>
+	<div id="sked">
+		<c:forEach varStatus="time" begin="9" end="20">
+			<p aria-label="${time.index}">
+				<span><fmt:formatNumber value="${time.index}" pattern="00"/>:00</span>
+				<span>-</span>
+			</p>
+		</c:forEach>
+	</div>
 </div>
 <div class="info-nav">
 	<a href="<c:url value='/myPage'/>">마이페이지</a>
 	<a href="<c:url value='/login/logout'/>">로그아웃</a>
 </div>
+<script>
+$(function(){
+	var sked = ${todaySchedule};
+	$(sked).each(function(i,t){
+		if(t.user_name=="null")
+			$("#sked").find("p[aria-label='"+t.pt_time+"']").find("span:last").text("휴무");
+		else $("#sked").find("p[aria-label='"+t.pt_time+"']").find("span:last").text(t.user_name+" 님");
+	});
+});
+</script>

@@ -56,10 +56,14 @@
 					<th colspan="2">기구사진</th>
 				</tr>
 				<tr>
-					<td colspan="2"><c:if test='${machine.mch_img!=null }'>
-							<img style="width: 200px; height: 200px" class="img_show"
-								src="../resources/img/${machine.mch_img }">
-						</c:if></td>
+					<td colspan="2">
+						<c:if test='${machine.mch_img!=null }'>
+							<img style="width: 200px; height: 200px" class="img_show" src="../resources/img/${machine.mch_img }">
+						</c:if>
+						<c:if test='${machine.mch_img==null }'>
+							<p style="width:100%;text-align:center;font-size:0.8em">등록된 사진이 없습니다.</p>
+						</c:if>
+					</td>
 				</tr>
 
 			</table>
@@ -89,17 +93,11 @@
 		form.method="post";
 		form.submit();
 	});
-	
 
 	document.getElementById("modifyBt").addEventListener('click',e=>{
 	let mch_num=$('#mch_num').val();
 		window.location="<c:url value='/facility/write'/>?mch_num="+mch_num+"&mode=modi";
 	});
-	
-	
-
-
-	
 </script>
 </body>
 </html>

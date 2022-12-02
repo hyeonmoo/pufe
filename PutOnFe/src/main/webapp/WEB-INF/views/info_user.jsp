@@ -30,9 +30,25 @@
 	<c:if test="${not empty userview.trainer}">${userview.trainer_name} 트레이너</c:if>
 	<c:if test="${empty userview.trainer}">--</c:if>
 	</p>
-	<p><fmt:formatDate value="${userview.buy_date}" pattern="yy/MM/dd" type="date"/>~
-		<fmt:formatDate value="${userview.end_date}" pattern="yy/MM/dd" type="date"/></p>
-	<p>${userview.remain}일 | PT ${userview.days-userview.pt_times}회 남음</p>
+	<fmt:parseDate var="buyDate" value="${userview.buy_date }" pattern="yyyy-MM-dd" type="date"/>
+	<fmt:parseDate var="endDate" value="${userview.end_date }" pattern="yyyy-MM-dd" type="date"/>
+	<p>
+		<fmt:formatDate value="${buyDate}" pattern="yy/MM/dd ~" type="date"/>
+		<fmt:formatDate value="${endDate}" pattern="yy/MM/dd" type="date"/>
+	</p>
+	<p>${userview.remain}일 | 남은PT ${userview.days-userview.pt_times}회</p>
+	<c:if test="${empty myMatch}">
+		<p>약속된 매칭 없음</p>
+	</c:if>
+	<c:if test="${not empty myMatch}">
+	<fmt:parseDate var="mchDate" value="${myMatch.date }" pattern="yyyy-MM-dd" type="date"/>
+	<fmt:parseDate var="mchTime" value="${myMatch.time }" pattern="HH:mm" type="time"/>
+		<p><fmt:formatDate value="${mchDate}" pattern="MM/dd" type="date"/> 
+			| <fmt:formatDate value="${mchTime}" pattern="HH:mm" type="time"/> 
+			| <font>${myMatch.part=="chest"?"가슴":myMatch.part=="back"?"등":"하체"}</font> 
+			| <font>${myMatch.name}</font>
+		</p>
+	</c:if>
 </div>
 <div class="info-nav">
 	<a href="<c:url value='/myPage'/>">마이페이지</a>

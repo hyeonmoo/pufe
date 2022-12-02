@@ -6,7 +6,7 @@
     <div id="menu_recommend" class="menu"><a href="<c:url value='/recommend'/>">추천정보</a></div>
     <div id="menu_machine_info" class="menu"><a href="<c:url value='/machines'/>">시설</a></div>
     <div id="menu_rank" class="menu"><a href="<c:url value='/bigThree'/>">랭킹</a></div>
-    <div id="menu_match" class="menu"><a href="<c:url value='/matching'/>">헬스메이트</a></div>
+    <div id="menu_match" class="menu"><a href="<c:url value='/healthmate'/>">헬스메이트</a></div>
     <div id="menu_club_info" class="menu"><a href="<c:url value='/road'/>">오시는길</a></div>
     <div id="client_info" class="menu">
         <a href="#"><img src="${path}/resources/img/human.png">${not empty sessionScope.email?user.user_name:'손' }님 | 3대 ${user.squat+user.benchpress+user.deadlift}</a>
