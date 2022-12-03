@@ -2,14 +2,16 @@ package com.putupiron.pufe.dto;
 
 import java.time.LocalDate;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Getter @Setter
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
 public class PTReserv {
 	private Integer		pt_no;
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private	LocalDate	pt_date;
 	private Integer		pt_time;
 	private	String		trainer_email;
@@ -29,16 +31,5 @@ public class PTReserv {
 		this.pt_date = pt_date;
 		this.pt_time = pt_time;
 		this.trainer_email = trainer_email;
-	}
-	public String getUser_tel() {
-		if(user_tel!=null) return user_tel.substring(7);
-		return user_tel;
-	}
-	@Override
-	public String toString() {
-		if(user_tel!=null) user_tel=user_tel.substring(7);
-		return "{pt_no:" + pt_no + ", pt_date:'" + pt_date + "', pt_time:" + pt_time + ", trainer_email:'"
-				+ trainer_email + "', trainer_name:'" + trainer_name + "', user_email:'" + user_email + "', user_name:'"
-				+ user_name + "', user_tel:'" + user_tel + "', request:'" + request + "'}";
 	}
 }

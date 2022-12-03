@@ -129,23 +129,11 @@ public class Ctrl_Home {
 	@GetMapping("/menu2")
 	public String menu2(SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
 		User user = navBar(session, m, hsReq);
-		if (user == null)
-			return "login";
+		if (user == null) return "login";
 		String user_type = user.getUser_type();
 		List<PTReserv> ptrList = null;
 		switch (user_type) {
-		case "U":
-			ptrList = ptDao.reservList(user.getTrainer(), user_type);
-			List<String> bookedList = new ArrayList<>();
-			for(PTReserv ptr:ptrList) {
-				String dateTime = "{pt_date:'"+ptr.getPt_date()+"', pt_time:"+ptr.getPt_time()+"}";
-				bookedList.add(dateTime);
-			}
-			List<PTReserv> userList = ptDao.userBookList(user.getUser_email());
-
-			m.addAttribute("bookedList", bookedList);
-			m.addAttribute("userList", userList);
-			return "menu_user2";
+		case "U": return "menu_user2";
 		case "T":
 			ptrList = ptDao.reservList(user.getUser_email(), user_type);
 			List<PTReserv> bookeds = new ArrayList<>();

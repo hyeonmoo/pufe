@@ -28,12 +28,8 @@ public class PTDao_imp implements PTDao {
 		return session.selectList(namespace+"userBookList",email);
 	}
 	@Override
-	public Map<String, Object> ptDateTime(Integer pt_no) throws Exception {
-		String dateTime = session.selectOne(namespace+"ptDateTime",pt_no);
-		Map<String, Object> map = new HashMap<>();
-		map.put("pt_date", dateTime.split("_")[0]);
-		map.put("pt_time", dateTime.split("_")[1]);
-		return map;
+	public PTReserv getRezInfoByNo(Integer pt_no) throws Exception {
+		return session.selectOne(namespace+"getRezInfoByNo",pt_no);
 	}
 	@Override
 	public int reserve(PTReserv ptr) throws Exception{

@@ -85,8 +85,10 @@
 			<td>${user.gender=="M"?"남":"여"}</td>
 			<td class="tel">${user.user_tel}</td>
 			<td>${user.prod_name }</td>
-			<td><fmt:formatDate value="${user.buy_date}" pattern="yyyy-MM-dd" type="date"/></td>
-			<td><fmt:formatDate value="${user.end_date}" pattern="yyyy-MM-dd" type="date"/></td>
+			<fmt:parseDate var="buyDate" value="${user.buy_date }" pattern="yyyy-MM-dd" type="date"/>
+			<fmt:parseDate var="endDate" value="${user.end_date }" pattern="yyyy-MM-dd" type="date"/>
+			<td><fmt:formatDate value="${buyDate}" pattern="yyyy-MM-dd" type="date"/></td>
+			<td><fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd" type="date"/></td>
 			<td>${user.remain }</td>
 			<td>${user.trainer_name }
 				<c:if test="${user.trainer!=null }">

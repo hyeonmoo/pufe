@@ -1,8 +1,9 @@
 package com.putupiron.pufe;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,35 +49,45 @@ public class Ctrl_PTReservation {
 		return classifiedList;
 	}
 //	예약(확정)하려는 날짜, 시간에 이미 예약확정된 일정이 있는지 검사
-	public boolean alreadyBooked(List<PTReserv> ptrList, Date pt_date, Integer pt_time) {
+	public boolean alreadyBooked(List<PTReserv> ptrList, PTReserv targetRez) {
 		for(PTReserv ptr:ptrList) 
-			if(ptr.getPt_date().equals(pt_date.toString()) && ptr.getPt_time()==pt_time)
-				return false;
-		return true;
+			if(ptr.getPt_date().equals(targetRez.getPt_date()) && ptr.getPt_time()==targetRez.getPt_time()) return true;
+		return false;
+	}
+//	PT일정 조회
+	@GetMapping()
+	public ResponseEntity<Map<String,List<PTReserv>>> listup(HttpSession session){
+		try {
+			User user = navBar(session);
+			Map<String,List<PTReserv>> listMap = new HashMap<>();
+			switch(user.getUser_type()) {
+			case "U":
+				List<PTReserv> ptrList = ptDao.reservList(user.getTrainer(), user.getUser_type());
+				List<PTReserv> userBookList = ptDao.userBookList(user.getUser_email());
+				listMap.put("bookedList", ptrList);
+				listMap.put("userList", userBookList);
+				break;
+			case "T":
+				
+				break;
+			}
+			return new ResponseEntity<>(listMap,HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 //	유저-PT예약신청
-	@PostMapping("/reservation")
-	public ResponseEntity<List<List<?>>> reserve(@RequestBody PTReserv newPtr, HttpSession session){
+	@PostMapping(value="/reservation", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> reserve(@RequestBody PTReserv newPtr, HttpSession session){
 		try{
 			User user = navBar(session);
 			newPtr.setTrainer_email(user.getTrainer());
 			newPtr.setUser_email(user.getUser_email());
-			if(ptDao.reserve(newPtr)!=1) throw new Exception("reserv failed");
-			List<PTReserv> ptrList=ptDao.reservList(user.getTrainer(),user.getUser_type());
-			List<String> bookedList = new ArrayList<>();
-			for(PTReserv ptr:ptrList) {
-				String dateTime = "{pt_date:'"+ptr.getPt_date()+"', pt_time:"+ptr.getPt_time()+"}";
-				bookedList.add(dateTime);
-			}
-			List<PTReserv> userList = ptDao.userBookList(user.getUser_email());
-			List<List<?>> classifiedList = new ArrayList<>();
-			classifiedList.add(bookedList);
-			classifiedList.add(userList);
-			return new ResponseEntity<>(classifiedList,HttpStatus.OK);
+			if(ptDao.reserve(newPtr)!=1) throw new Exception("요청 등록 실패");
+			return new ResponseEntity<>("신청되었습니다.",HttpStatus.OK);
 		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 //	트레이너-일정 비활성화
@@ -99,9 +111,8 @@ public class Ctrl_PTReservation {
 			User user = navBar(session);
 			String trainer_email = user.getUser_email();
 			List<PTReserv> ptrList = ptDao.reservList(trainer_email, "U");
-			Date pt_date = Date.valueOf((String)ptDao.ptDateTime(pt_no).get("pt_date"));
-			Integer pt_time = Integer.parseInt((String) ptDao.ptDateTime(pt_no).get("pt_time"));
-			if(!alreadyBooked(ptrList,pt_date,pt_time)) throw new Exception("already booked");
+			PTReserv targetRez = ptDao.getRezInfoByNo(pt_no); 
+			if(alreadyBooked(ptrList,targetRez)) throw new Exception("already booked");
 			if(ptDao.confirm(pt_no)!=1) throw new Exception("confirm failed");
 			return new ResponseEntity<>(classify(ptDao.reservList(trainer_email, user.getUser_type())),HttpStatus.OK);
 		} catch(Exception e) {
@@ -116,9 +127,7 @@ public class Ctrl_PTReservation {
 			User user = navBar(session);
 			String trainer_email = user.getUser_email();
 			List<PTReserv> ptrList= ptDao.reservList(trainer_email, "U");
-			Date pt_date = Date.valueOf(modData.getPt_date());
-			Integer pt_time = modData.getPt_time();
-			if(!alreadyBooked(ptrList,pt_date,pt_time)) throw new Exception("already booked");
+			if(alreadyBooked(ptrList,modData)) throw new Exception("already booked");
 			if(ptDao.update(modData)!=1) throw new Exception("update failed");
 			return new ResponseEntity<>(classify(ptDao.reservList(trainer_email, user.getUser_type())),HttpStatus.OK);
 		} catch(Exception e) {

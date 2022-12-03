@@ -10,9 +10,9 @@
 	<select id="userBookList" parameterType="String" resultType="PTReserv">
 		select * from pt_reserview where user_email=#{email}
 	</select>
-	<!-- 해당 고유번호에 해당하는 예약 날짜-시간 호출 -->
-	<select id="ptDateTime" parameterType="int" resultType="String">
-		select concat(pt_date,"_",pt_time) from pt_reserview where pt_no=#{pt_no}
+	<!-- 해당 고유번호에 해당하는 예약정보 호출 -->
+	<select id="getRezInfoByNo" parameterType="int" resultType="PTReserv">
+		select * from pt_reserview where pt_no=#{pt_no}
 	</select>
 	<!-- PT예약 -->
 	<insert id="reserve" parameterType="PTReserv">
