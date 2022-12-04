@@ -29,7 +29,7 @@
                 <a href="<c:url value='/login/resetPw/find'/>">비밀번호 찾기</a> |
                 <a href="<c:url value='/join'/>">회원가입</a>
             </div>
-            <input type="hidden" name="toURL" value="${param.toURL }">
+            <input type="hidden" name="toURL" value="${from}">
         </form>
     </div>
 <script>

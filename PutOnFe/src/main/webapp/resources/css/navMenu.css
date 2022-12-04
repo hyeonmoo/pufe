@@ -6,25 +6,23 @@
 a{text-decoration: none;}
 
 /* 상단 바 */
-#nav_menu{
+.nav_menu{
     width:100%; height:65px;
-    display: flex;
-    justify-content:flex-start;
+    display: grid;
+    grid-template-columns:repeat(7,1fr);
     background-color: #121212;
     position:fixed;
     top:0; left:0;
     z-index:10;
 }
 @media (max-width:1100px){
-    #nav_menu{
-        width:1100px;
-    }
+    .nav_menu{width:1100px;}
 }
-.menu{
-    width:20%; height:100%;
-    text-align: center;
+.nav_menu>div{
+    height:100%;
+    position:relative;
 }
-.menu>a{
+.nav_menu>div>a{
     width:100%; height:100%;
     color:white;
     display: flex;
@@ -32,47 +30,35 @@ a{text-decoration: none;}
     align-items: center;
     z-index:10;
 }
-.menu:not([id=logo])>a:hover{background-color: black;}
+.nav_menu>div:nth-child(n+2)>a:hover{background:black;}
 
 /* 로고 */
-#logo{
+.nav_menu>.logo{
     background: url("../img/logo_nav.png") no-repeat left center;
     background-size: 100% 60%;
     margin:0 2%;
 }
-#logo>a{
-    width:100%; height:100%;
-    display: block;
-}
-
 /* 사용자 정보 */
-#client_info{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#client_info>a{
-    color:white;
-}
-#client_info>a>img{
-    width:10%;
-}
+.nav_menu>.user-info>a>img{width:10%;}
 
 /* 서브메뉴 */
 .submenu{
     display: none;
     position:absolute;
     top:80%;
-    width:10%;
-    background-color: #121212;
+    left:5%;
+    width:90%;
+    background: #121212;
 }
-#client_info:hover>.submenu{
+.nav_menu>div:hover>.submenu{
     display: block;
     z-index: 10;
 }
 .submenu>a{
     color:white;
     display: block;
-    padding:15px;
+    height:45px;
+    line-height:45px;
+    text-align:center;
 }
-.submenu>a:hover{background-color: black;}
+.submenu>a:hover{background: black;}

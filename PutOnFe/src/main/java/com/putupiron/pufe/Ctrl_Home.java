@@ -96,7 +96,7 @@ public class Ctrl_Home {
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user", user);
-		m.addAttribute("lastPage", "?toURL=" + hsReq.getServletPath());
+		m.addAttribute("from",hsReq.getServletPath());
 		return user;
 	}
 
@@ -143,9 +143,7 @@ public class Ctrl_Home {
 			List<Machine> machinelist = machineDao.search(sc);
 			m.addAttribute("machinelist", machinelist);
 			m.addAttribute("ph", ph);
-
 			return "board_machines";
-
 		default:
 			return "redirect:/login";
 		}
@@ -173,9 +171,6 @@ public class Ctrl_Home {
 		m.addAttribute("machineList", machineList);
 		return "boarder_machines";
 	}
-
-// 기구 등록
-	
 
 //	Big3 랭킹
 	@GetMapping("/bigThree")

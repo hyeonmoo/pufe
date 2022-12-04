@@ -24,7 +24,8 @@ public class Ctrl_Login {
 
 //	로그인 화면
 	@GetMapping()
-	public String login_get() {
+	public String login_get(String from, Model m) {
+		m.addAttribute("from",from);
 		return "login";
 	}
 //	로그인 버튼
