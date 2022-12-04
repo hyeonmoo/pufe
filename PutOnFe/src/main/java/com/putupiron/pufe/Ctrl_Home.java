@@ -45,7 +45,12 @@ public class Ctrl_Home {
 //	홈 화면
 	@GetMapping("/")
 	public String home(SearchCondition sc, HttpSession session, Model m) throws Exception {
-
+		//홈 화면이 로드 될 때마다 불필요한 데이터 삭제
+		userDao.deleteExpiredGoods();
+		ptDao.decBookableNum();
+		ptDao.deleteExpiredRequest();
+		hMateDao.deleteExpiredMatching();
+		
 		List<Machine> machineList = machineDao.selectAllMachines();
 		List<Recommend> list = recDao.indexrec();
 		m.addAttribute("machineList", machineList);

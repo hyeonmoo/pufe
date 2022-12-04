@@ -95,4 +95,10 @@
 		from user_view left join username on user_view.trainer=username.email
 		where user_email=#{email}
 	</select>
+	<!-- 상품구매날짜 만료 시 유저의 상품구매정보 삭제 -->
+	<update id="deleteExpiredGoods">
+		update user left join goods on user.prod_name=goods.goods_name
+		set user.prod_name=null, user.buy_date=null, trainer=null, pt_times=0
+		where (user.buy_date + interval goods.period*30 day)&lt;date_format(now(),'%Y-%m-%d');
+	</update>
 </mapper>

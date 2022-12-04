@@ -89,4 +89,9 @@ public class HealthMateDao_imp implements HealthMateDao {
 	public List<MyMatch> confirmedPostOfUser(String email) {
 		return session.selectList(namespace+"confirmedPostOfUser",email);
 	}
+//	날짜 만료된 매칭 삭제(시간은 고려X)
+	@Override
+	public int deleteExpiredMatching() {
+		return session.delete(namespace+"deleteExpiredMatching");
+	}
 }

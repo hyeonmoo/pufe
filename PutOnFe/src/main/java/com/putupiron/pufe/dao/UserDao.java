@@ -30,4 +30,5 @@ public interface UserDao {
 	int		changeUserType(String user_email, String user_type) throws Exception;
 	int		changeTrainer(String user_email, String trainer) throws Exception;
 	List<TrainerInfo> TrainerUserView(String email) throws Exception;
+	int		deleteExpiredGoods();
 }

@@ -34,4 +34,6 @@ public interface HealthMateDao {
 	int deleteAllRequestsOfConfirmedPost(int post_no);
 //	해당 유저의 완료된 매칭 조회(시간순)
 	List<MyMatch> confirmedPostOfUser(String email);
+//	날짜 지난 매칭 삭제
+	int deleteExpiredMatching();
 }

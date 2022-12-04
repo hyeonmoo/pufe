@@ -49,10 +49,11 @@
 	color:white;
 	cursor:pointer;
 }
-#today{background-color:rgba(70,130,150,0.7);}
-.disabled{background-color:#eee; color:#aaa; cursor:default;}
+#today{background:rgba(70,130,150,0.7);}
+.disabled{background:#eee; color:#aaa; cursor:default;}
 .date:not(.disabled), .time:not(.disabled){cursor:pointer;}
-.selected{background-color:rgb(70,130,150) !important;}
-.requested{background-color:rgb(250,130,0) !important;}
-.booked{background-color:rgb(100,200,100) !important;}
+.selected{background:rgb(70,130,150) !important;}
+.requested{background:rgb(250,130,0) !important;}
+.booked{background:rgb(100,200,100) !important;}
+.expired{background:#121212 !important; color:white !important;}
 .time.booked, .time.requested{color:#121212 !important;}

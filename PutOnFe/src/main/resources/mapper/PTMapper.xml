@@ -34,4 +34,15 @@
 	<update id="update" parameterType="PTReserv">
 		update pt_reserv set pt_date=#{pt_date}, pt_time=#{pt_time}, request="booked" where pt_no=#{pt_no}
 	</update>
+	<!-- PT예약이 확정된 상태로 날짜 지날 시 유저의 PT가능 횟수 차감 -->
+	<update id="decBookableNum">
+		update user right join pt_reserv on user.user_email=pt_reserv.user_email
+		set pt_times=(pt_times-1), request="expired"
+		where pt_reserv.request="booked" and pt_reserv.pt_date &lt;= date_format(now(),'%Y-%m-%d') and pt_reserv.pt_time &lt;= hour(now())
+	</update>
+	<!-- 요청 상태로 만료된 예약 삭제 -->
+	<delete id="deleteExpiredRequest">
+		delete from pt_reserv
+		where request="requested" and pt_date &lt;= now()
+	</delete>
 </mapper>

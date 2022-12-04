@@ -19,13 +19,15 @@
 	</select>
 	<!-- 상품 구입 -->
 	<update id="purchase" parameterType="map">
-		update user set prod_name=#{goods_name}, buy_date=now()<if test='option=="yesPT"'>, trainer="-"</if> where user_email=#{email}
+		update user left join goods
+		set prod_name=#{goods_name}, buy_date=now()<if test='option=="yesPT"'>, trainer="-", user.pt_times=goods.times</if>
+		where user_email=#{email}
 	</update>
 	<update id="modifygoods" parameterType="Goods">
 		update goods
 		set  goods_name=#{goods_name},period=#{period},PT=#{PT},times=#{times},price=#{price}   where goods_no=#{goods_no}
-		</update>
-		<insert id="write" parameterType="Goods">
+	</update>
+	<insert id="write" parameterType="Goods">
 		insert into goods (goods_no, goods_name, period,PT, times, price) values (#{goods_no}, #{goods_name}, #{period}, #{PT},#{times},  #{price})
 	</insert>
 	<delete id="remove" parameterType="map">

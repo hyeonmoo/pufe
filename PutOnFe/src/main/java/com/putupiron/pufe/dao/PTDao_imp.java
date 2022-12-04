@@ -51,4 +51,12 @@ public class PTDao_imp implements PTDao {
 	public int confirm(Integer pt_no) throws Exception {
 		return session.update(namespace+"confirm",pt_no);
 	}
+	@Override
+	public int decBookableNum() {
+		return session.update(namespace+"decBookableNum");
+	}
+	@Override
+	public int deleteExpiredRequest() {
+		return session.delete(namespace+"deleteExpiredRequest");
+	}
 }

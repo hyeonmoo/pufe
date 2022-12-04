@@ -59,8 +59,8 @@ public class Ctrl_PTReservation {
 				List<PTReserv> bookedList = new ArrayList<>();
 				List<PTReserv> reqedList = new ArrayList<>();
 				for(PTReserv ptr : ptrList) {
-					if(ptr.getRequest().equals("booked")) bookedList.add(ptr);
-					else reqedList.add(ptr);
+					if(ptr.getRequest().equals("requested")) reqedList.add(ptr);
+					else bookedList.add(ptr); 
 				}
 				listMap.put("bookedList", bookedList);
 				listMap.put("reqedList", reqedList);

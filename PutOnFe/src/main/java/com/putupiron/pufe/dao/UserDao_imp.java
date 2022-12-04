@@ -120,4 +120,9 @@ public class UserDao_imp implements UserDao {
 	public List<TrainerInfo> TrainerUserView(String email) throws Exception {
 		return session.selectList(namespace+"selectTrainerUsers", email);
 	}
+	@Override
+	public int deleteExpiredGoods() {
+		return session.update(namespace+"deleteExpiredGoods");
+	}
+	
 }

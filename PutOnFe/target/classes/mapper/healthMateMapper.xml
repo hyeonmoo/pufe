@@ -82,4 +82,9 @@
 		where poster=#{email} or partner=#{email}
 		order by date, time, post_no;
 	</select>
+	<!-- 날짜 지난 매칭 삭제(시간 지난건 X, 요청은 자동 삭제됨) -->
+	<delete id="deleteExpiredMatching">
+		delete from healthmate_post
+		where date &lt; date_format(now(),'%Y-%m-%d')
+	</delete>
 </mapper>

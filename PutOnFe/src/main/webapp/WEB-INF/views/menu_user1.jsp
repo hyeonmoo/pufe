@@ -59,7 +59,7 @@ $("input[type=checkbox]").click(function(){
 });
 // 구매 확인창
 function purchase(){
-	if($("#buying_goods_name").val()==null){
+	if($("input[name=goods_name]").val()==null){
 		alert("구입할 상품을 선택해주세요.");
 		return false;
 	}
