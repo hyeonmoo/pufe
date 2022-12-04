@@ -55,7 +55,7 @@
 var now= new Date();
 var today= new Date();
 // 리스트맵을 변수에 저장
-var lists=null;
+var listMap=null;
 //함수 실행부
 listup();
 
@@ -103,7 +103,7 @@ $(document).on("click",".date:not('.disabled')",function(){
 	$("#reservDate").val("-");
 	$(this).addClass('selected');
 	now = new Date(nowY,nowM,$(this).text());
-	buildTimeTable(lists);
+	buildTimeTable(listMap);
 });
 // 시간 선택 시 이벤트
 $(document).on("click",".time:not('.disabled')",function(){
@@ -132,8 +132,8 @@ function listup(){
 	$.ajax({
 		type:'get',
 		url:'pt',
-		success: function(listMap){
-			lists = listMap;
+		success: function(result){
+			listMap = result;
 			buildCal(listMap);
 			buildTimeTable(listMap);
 		},

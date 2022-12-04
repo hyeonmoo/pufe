@@ -35,19 +35,6 @@ public class Ctrl_PTReservation {
 		User user = userDao.selectUser(user_email);
 		return user;
 	}
-//	리스트에 담긴 정보를 예약, 요청별로 분류해서 저장한 리스트를 리스트에 담아 리턴하는 함수 엌ㅋㅋㅋㅋ
-	public List<List<PTReserv>> classify(List<PTReserv> ptrList){
-		List<PTReserv> bookeds = new ArrayList<>();
-		List<PTReserv> reqeds = new ArrayList<>();
-		for(PTReserv ptr:ptrList) {
-			if(ptr.getRequest().equals("booked")) bookeds.add(ptr);
-			if(ptr.getRequest().equals("requested")) reqeds.add(ptr);
-		}
-		List<List<PTReserv>> classifiedList = new ArrayList<>();
-		classifiedList.add(bookeds);
-		classifiedList.add(reqeds);
-		return classifiedList;
-	}
 //	예약(확정)하려는 날짜, 시간에 이미 예약확정된 일정이 있는지 검사
 	public boolean alreadyBooked(List<PTReserv> ptrList, PTReserv targetRez) {
 		for(PTReserv ptr:ptrList) 
@@ -68,7 +55,15 @@ public class Ctrl_PTReservation {
 				listMap.put("userList", userBookList);
 				break;
 			case "T":
-				
+				ptrList = ptDao.reservList(user.getUser_email(), user.getUser_type());
+				List<PTReserv> bookedList = new ArrayList<>();
+				List<PTReserv> reqedList = new ArrayList<>();
+				for(PTReserv ptr : ptrList) {
+					if(ptr.getRequest().equals("booked")) bookedList.add(ptr);
+					else reqedList.add(ptr);
+				}
+				listMap.put("bookedList", bookedList);
+				listMap.put("reqedList", reqedList);
 				break;
 			}
 			return new ResponseEntity<>(listMap,HttpStatus.OK);
@@ -91,60 +86,52 @@ public class Ctrl_PTReservation {
 		}
 	}
 //	트레이너-일정 비활성화
-	@PostMapping("/disable")
-	public ResponseEntity<List<List<PTReserv>>> disable(@RequestBody PTReserv ptr, HttpSession session) {
+	@PostMapping(value="/disable", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> disable(@RequestBody PTReserv ptr, HttpSession session) {
 		try {
 			User user = navBar(session);
-			String trainer_email = user.getUser_email();
-			ptr.setTrainer_email(trainer_email);
-			if(ptDao.disable(ptr)!=1)throw new Exception();
-			return new ResponseEntity<>(classify(ptDao.reservList(trainer_email, user.getUser_type())),HttpStatus.OK);
+			ptr.setTrainer_email(user.getUser_email());
+			if(ptDao.disable(ptr)!=1) throw new Exception("등록에 실패했습니다. 다시 시도해주세요.");
+			return new ResponseEntity<>("휴무를 등록했습니다.", HttpStatus.OK);
 		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 //	트레이너-예약 확정
-	@PatchMapping("/confirm")
-	public ResponseEntity<List<List<PTReserv>>> confirm(Integer pt_no, HttpSession session){
+	@PatchMapping(value="/confirm", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> confirm(Integer pt_no, HttpSession session){
 		try {
 			User user = navBar(session);
-			String trainer_email = user.getUser_email();
-			List<PTReserv> ptrList = ptDao.reservList(trainer_email, "U");
+			List<PTReserv> ptrList = ptDao.reservList(user.getUser_email(), "U");
 			PTReserv targetRez = ptDao.getRezInfoByNo(pt_no); 
-			if(alreadyBooked(ptrList,targetRez)) throw new Exception("already booked");
-			if(ptDao.confirm(pt_no)!=1) throw new Exception("confirm failed");
-			return new ResponseEntity<>(classify(ptDao.reservList(trainer_email, user.getUser_type())),HttpStatus.OK);
+			if(alreadyBooked(ptrList,targetRez)) throw new Exception("이미 예약된 시간입니다.");
+			if(ptDao.confirm(pt_no)!=1) throw new Exception("확정에 실패했습니다. 다시 시도해주세요.");
+			return new ResponseEntity<>("예약을 확정했습니다.",HttpStatus.OK);
 		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 //	트레이너-예약시간 변경
-	@PatchMapping("/modify")
-	public ResponseEntity<List<List<PTReserv>>> modify(@RequestBody PTReserv modData, HttpSession session) {
+	@PatchMapping(value="/modify", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> modify(@RequestBody PTReserv modData, HttpSession session) {
 		try {
 			User user = navBar(session);
-			String trainer_email = user.getUser_email();
-			List<PTReserv> ptrList= ptDao.reservList(trainer_email, "U");
-			if(alreadyBooked(ptrList,modData)) throw new Exception("already booked");
-			if(ptDao.update(modData)!=1) throw new Exception("update failed");
-			return new ResponseEntity<>(classify(ptDao.reservList(trainer_email, user.getUser_type())),HttpStatus.OK);
+			List<PTReserv> ptrList= ptDao.reservList(user.getUser_email(), "U");
+			if(alreadyBooked(ptrList,modData)) throw new Exception("변경하려는 시간에 이미 예약된 일정이 있습니다.");
+			if(ptDao.update(modData)!=1) throw new Exception("변경에 실패했습니다. 다시 시도해주세요.");
+			return new ResponseEntity<>("예약을 변경했습니다.",HttpStatus.OK);
 		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 //	트레이너-예약 취소
-	@DeleteMapping("/cancel")
-	public ResponseEntity<List<List<PTReserv>>> cancel(Integer pt_no, HttpSession session){
+	@DeleteMapping(value="/cancel", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> cancel(Integer pt_no){
 		try {
-			User user = navBar(session);
-			if(ptDao.cancel(pt_no)!=1) throw new Exception("cancel failed");
-			return new ResponseEntity<>(classify(ptDao.reservList(user.getUser_email(), user.getUser_type())),HttpStatus.OK);
+			if(ptDao.cancel(pt_no)!=1) throw new Exception("예약 취소에 실패했습니다. 다시 시도해주세요.");
+			return new ResponseEntity<>("예약을 취소했습니다.",HttpStatus.OK);
 		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }

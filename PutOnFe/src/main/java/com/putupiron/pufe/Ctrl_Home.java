@@ -2,7 +2,6 @@ package com.putupiron.pufe;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -130,23 +129,9 @@ public class Ctrl_Home {
 	public String menu2(SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
 		User user = navBar(session, m, hsReq);
 		if (user == null) return "login";
-		String user_type = user.getUser_type();
-		List<PTReserv> ptrList = null;
-		switch (user_type) {
+		switch (user.getUser_type()) {
 		case "U": return "menu_user2";
-		case "T":
-			ptrList = ptDao.reservList(user.getUser_email(), user_type);
-			List<PTReserv> bookeds = new ArrayList<>();
-			List<PTReserv> reqeds = new ArrayList<>();
-			for (PTReserv ptr : ptrList) {
-				if (ptr.getRequest().equals("booked"))
-					bookeds.add(ptr);
-				if (ptr.getRequest().equals("requested"))
-					reqeds.add(ptr);
-			}
-			m.addAttribute("bookeds", bookeds);
-			m.addAttribute("reqeds", reqeds);
-			return "menu_trainer2";
+		case "T": return "menu_trainer2";
 		case "A":
 			int totalCnt = machineDao.searchCnt(sc);
 			PageHandler ph = new PageHandler(totalCnt, sc);
