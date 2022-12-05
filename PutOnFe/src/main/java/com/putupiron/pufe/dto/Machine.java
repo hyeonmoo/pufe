@@ -9,7 +9,7 @@ public class Machine {
 	private	Integer	mch_num;
 	private	String	mch_name;
 	private	String	mch_img;
-	private int	mch_serial;
+	private String	mch_serial;
 	private	String	mch_date;
 	private	String	mch_info;
 	private	String	mch_detail;

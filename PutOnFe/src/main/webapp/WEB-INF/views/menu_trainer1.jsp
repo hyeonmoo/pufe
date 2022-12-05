@@ -22,10 +22,10 @@
 			<col width="90px">
 			<col width="60px">
 			<col width="210px">
-			<col width="150px">
+			<col width="180px">
 			<col width="120px">
-			<col width="150px" span=2>
-			<col width="90px" span=3>
+			<col width="180px" span=2>
+			<col width="90px" span=2>
 		</colgroup>
 		<tr>
 			<th>이름</th>
@@ -35,7 +35,6 @@
 			<th>가입상품</th>
 			<th>구매날짜</th>
 			<th>만료날짜</th>
-			<th>PT진행수</th>
 			<th>남은PT수</th>
 			<th>BIG3</th>
 		</tr>
@@ -46,10 +45,9 @@
 			<td>${user.user_email }</td>
 			<td class="tel">${user.user_tel}</td>
 			<td>${user.prod_name }</td>
-			<td><fmt:formatDate value="${user.buy_date}" pattern="yyyy-MM-dd" type="date"/></td>
-			<td><fmt:formatDate value="${user.end_date}" pattern="yyyy-MM-dd" type="date"/></td>
+			<td>${user.buy_date}</td>
+			<td>${user.end_date}</td>
 			<td>${user.pt_times }</td>
-			<td>${user.pt_remain }</td>
 			<td>${user.big3 }
 				<button class="bt_edit"><img src="${path}/resources/img/icon_edit.png"></button>
 				<form class="editor" action="<c:url value='manage/editBig3'/>" method="post">

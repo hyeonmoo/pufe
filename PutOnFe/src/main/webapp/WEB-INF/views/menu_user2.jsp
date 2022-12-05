@@ -211,7 +211,7 @@ function buildTimeTable(listMap){
 	$(".time").each(function(index,datetime){
 		// 현재시각 기준 1시간 이후까지 예약 비활성화
 		if($(datetime).attr("date")==formatDate(today))
-			if($(datetime).attr("time")<=(today.getHours+1))
+			if($(datetime).attr("time")<=(today.getHours()+1))
 				$(datetime).addClass("disabled");
 		// 다른 사람이 예약한 시간 비활성화
 		$(bookedList).each(function(i,dt) {

@@ -104,7 +104,7 @@
 				</form>
 				</c:if>
 			</td>
-			<td>${user.days }</td>
+			<td>${user.pt_times==0?"":user.pt_times}</td>
 			<td>${user.big3 }
 				<button class="bt_edit"><img src="${path}/resources/img/icon_edit.png"></button>
 				<form class="editor big3" action="<c:url value='manage/editBig3'/>" method="post">

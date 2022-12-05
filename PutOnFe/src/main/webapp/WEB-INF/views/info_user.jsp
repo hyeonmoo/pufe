@@ -36,7 +36,7 @@
 		<fmt:formatDate value="${buyDate}" pattern="yy/MM/dd ~" type="date"/>
 		<fmt:formatDate value="${endDate}" pattern="yy/MM/dd" type="date"/>
 	</p>
-	<p>${userview.remain}일 | 남은PT ${userview.days-userview.pt_times}회</p>
+	<p>${userview.remain}일 | 남은PT ${userview.pt_times}회</p>
 	<c:if test="${empty myMatch}">
 		<p>약속된 매칭 없음</p>
 	</c:if>

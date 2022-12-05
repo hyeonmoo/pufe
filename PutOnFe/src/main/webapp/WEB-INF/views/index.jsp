@@ -52,8 +52,8 @@
 				<a href="<c:url value='/recommend'/>">더보기</a>
 			</div>
 			<ul class="contents list">
-			<c:forEach items="${list }" var="rec">
-				<li><a href="<c:url value='/recommend/read?rec_num=${rec.rec_num }'/>">${rec.rec_title}</a></li>
+			<c:forEach items="${recommendList}" var="rec">
+				<li><a href="<c:url value='/recommend/read?rec_num=${rec.rec_num}'/>">${rec.rec_title}</a></li>
 				</c:forEach>
 			</ul>
 		</div>
@@ -64,7 +64,7 @@
 			</div>
 			<div class="contents slide">
 				<c:forEach items="${machineList}" var="machine">
-					<img src="${path}/resources/img/${machine.mch_img}">
+					<img src="${path+='/uploadImgs/'+=machine.mch_img}">
 			   	</c:forEach>
 			    <button id="prev">&lang;</button>
 			    <button id="next">&rang;</button>

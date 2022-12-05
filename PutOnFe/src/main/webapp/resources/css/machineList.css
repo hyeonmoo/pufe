@@ -1,0 +1,116 @@
+@font-face {
+    font-family: mbng;
+    src: url(../fonts/Mabinogi_Classic_OTF.woff);
+}
+.container{
+	width:900px;
+	margin: 100px auto 0 auto;
+}
+.container>nav>a{
+	display: inline-block;
+    width: 150px;
+    height: 30px;
+    line-height: 26px;
+    font-size: 20px;
+    color: #121212;
+    border: 2px solid #121212;
+    border-radius: 10px;
+    margin: 0 1%;
+    text-align: center;
+}
+.container>nav>a:hover{
+	background:#eee;
+}
+.container>h1{
+	width:100%;
+	text-align:center;
+	font-size:40px;
+	margin:20px auto;
+}
+.container>table{
+	width:100%;
+	border-collapse:collapse;
+	margin-bottom: 20px;
+}
+.container tr:nth-of-type(odd){
+	background-color:#eee;
+}
+.container th{
+	line-height : 40px;
+	color:white;
+	background-color:#121212;
+}
+.container th{
+	line-height : 40px;
+	color:white;
+	background-color:#121212;
+}
+.container td{
+	border-left:0; border-right:0;
+	text-align:center;
+	padding:15px 0;
+	cursor:default;
+}
+.container td>a:hover {
+  text-decoration: underline;
+}
+.tools{position:relative;}
+.tools>button{
+	display:inline-block;
+	position:absolute;
+	top:0; right:0;
+	width:100px; height:30px;
+	border-radius:5px;
+	border:0;
+	cursor:pointer;
+	background:#ddd;
+	font:15px mbng;
+}
+.tools>button:hover{
+	background:#ccc;
+}
+.tools .searchBox{
+	width:100%;
+	display:flex;
+	justify-content:flex-start;
+	align-items:center;
+}
+.searchBox select{
+	width:100px; height:30px;
+	font:15px/30px mbng;
+	text-align:center;
+}
+.searchBox select>option{
+	font:13px/30px mbng;
+}
+.searchBox input[type=text]{
+	width:240px; height:30px;
+	font:15px/30px mbng;
+}
+.searchBox input[type=submit]{
+	width:60px; height:30px;
+	border-radius:5px;
+	border:0;
+	background : #ddd;
+	cursor:pointer;
+}
+.searchBox input[type=submit]:hover{
+	background:#ccc;
+}
+.pagination {
+	text-align:center;
+	list-style:none;
+	margin-top:10px;
+}
+.pagination>li>a{
+	display:inline-block;
+	width:30px; height:30px;
+    line-height: 30px;
+    color: black;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.pagination>li>a:hover{
+	background:#eee;
+}

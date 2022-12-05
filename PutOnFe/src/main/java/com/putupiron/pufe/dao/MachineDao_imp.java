@@ -26,7 +26,6 @@ public class MachineDao_imp implements MachineDao  {
 	}
 	@Override
 	public Machine read(Integer mch_num) throws Exception{
-		
 		return session.selectOne(namespace+"read",mch_num);
 	}
 	@Override

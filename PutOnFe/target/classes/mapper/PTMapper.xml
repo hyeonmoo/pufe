@@ -43,6 +43,6 @@
 	<!-- 요청 상태로 만료된 예약 삭제 -->
 	<delete id="deleteExpiredRequest">
 		delete from pt_reserv
-		where request="requested" and pt_date &lt;= now()
+		where request="requested" and pt_date &lt; date_format(now(),'%Y-%m-%d')
 	</delete>
 </mapper>

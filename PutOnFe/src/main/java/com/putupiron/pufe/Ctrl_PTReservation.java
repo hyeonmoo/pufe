@@ -77,6 +77,7 @@ public class Ctrl_PTReservation {
 	public ResponseEntity<String> reserve(@RequestBody PTReserv newPtr, HttpSession session){
 		try{
 			User user = navBar(session);
+			if(user.getPt_times()==0) throw new Exception("PT이용횟수를 전부 소모하셨습니다.");
 			newPtr.setTrainer_email(user.getTrainer());
 			newPtr.setUser_email(user.getUser_email());
 			if(ptDao.reserve(newPtr)!=1) throw new Exception("요청 등록 실패");

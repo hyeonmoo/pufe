@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,124 +30,114 @@ public class Ctrl_Machine {
 	public static final String PATH ="C:\\SpringProjects\\resources\\pufe\\imgs";
 	
 	//세션정보와 이전 페이지 정보 저장
-	public User navBar(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+	public User navBar(HttpSession session, Model m) throws Exception {
 		String user_email = (String)session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
+		if(user==null || !user.getUser_type().equals("A")) throw new Exception("관리자 전용 페이지입니다.");
 		m.addAttribute("user",user);
-		m.addAttribute("from",hsReq.getServletPath());
 		return user;
 	}
-	
+	//관리자-시설관리 게시물 조회
 	@GetMapping("/read")
-	public String read(Integer mch_num, SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) {
+	public String read(Integer mch_num, SearchCondition sc, HttpSession session, Model m, RedirectAttributes ras) {
 		try {
-			navBar(session,m,hsReq);
+			navBar(session,m);
 			Machine machine=machineDao.read(mch_num);
 			m.addAttribute("machine",machine);
 			m.addAttribute("mode","read");
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "redirect:/facility"+sc.getQueryString();
+			ras.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/menu2"+sc.getQueryString();
 		}
-		return "board_machines_read";
+		return "machineRead";
 	}
 	
 	@GetMapping("/write")
-	public String write(Integer mch_num, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
-		User user= navBar(session,m,hsReq);
-		if (user == null || !user.getUser_type().equals("A")) return "redirect:/login";
+	public String write(Integer mch_num, String mode, HttpSession session, Model m) throws Exception {
+		navBar(session,m);
 		if(mch_num!=null) {
 			Machine machine=machineDao.read(mch_num);
 			m.addAttribute("machine",machine);
 		}
-		m.addAttribute("mode","write");
-		return "board_machines_regist";
+		m.addAttribute("mode",mode);
+		return "machineRegist";
 	}
+	
 	@PostMapping("/write")
-	public String save( Machine machine,String FileName, MultipartFile uploadFile, Model m, HttpSession session, RedirectAttributes ras) {
-		String uploadFileName = uploadFile.getOriginalFilename();
-		uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); // 경로가 있다면 원래 이름만 가져올 수 있도록
-		
-		UUID uuid = UUID.randomUUID();
-		uploadFileName = uuid.toString()+"_"+uploadFileName;
-		
-		File saveFile = new File(PATH, uploadFileName); 
+	public String save(Machine machine,String fileName, MultipartFile uploadFile, Model m, HttpSession session, RedirectAttributes ras) {
 		try {
-			uploadFile.transferTo(saveFile); // 스프링에서 제공하는 파일 객체를 자바 파일 객체로 변환
-			machine.setMch_img(uploadFileName);
+			navBar(session,m);
+			String uploadFileName = uploadFile.getOriginalFilename();
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); // 경로가 있다면 원래 이름만 가져올 수 있도록
+			if(uploadFileName!="") {
+				UUID uuid = UUID.randomUUID();
+				uploadFileName = uuid.toString()+"_"+uploadFileName;
+				File saveFile = new File(PATH, uploadFileName);
+				uploadFile.transferTo(saveFile); // 스프링에서 제공하는 파일 객체를 자바 파일 객체로 변환
+				machine.setMch_img(uploadFileName);
+			}
 			int rowCnt=machineDao.write(machine);
-			if(rowCnt!=1) throw new Exception("Write Error");
-			ras.addFlashAttribute("msg","write_success");
-			return "redirect:/facility";
+			if(rowCnt!=1) throw new Exception("작성에 실패했습니다. 다시 시도해주세요.");
+			ras.addFlashAttribute("msg","기구가 등록되었습니다.");
+			return "redirect:/menu2";
 		} catch(Exception e) {
-			e.printStackTrace();
-			m.addAttribute("machine", machine);
-			m.addAttribute("msg", "write_error");
-			return "board_machines_regist";
+			ras.addAttribute("machine", machine);
+			ras.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/facility/write";
 		}
 	}
 	@PostMapping("/modify")
-	public String modify(SearchCondition sc,String fileName,Integer del, MultipartFile uploadFile, RedirectAttributes ras, Machine machine, Model m, HttpSession session) throws Exception {
-		if(del==1) {
+	public String modify(Machine machine, SearchCondition sc, String fileName, String imgMode, MultipartFile uploadFile, RedirectAttributes ras, Model m, HttpSession session) throws Exception {
+		if(imgMode.equals("original")) {
 			Machine mch=machineDao.read(machine.getMch_num());
 			machine.setMch_img(mch.getMch_img());
-		} else if(del==3) {
+		} else if(imgMode.equals("empty")) {
 			machine.setMch_img(null);
-		} else {	
-			// 여러개의 파일일 경우 향상된 for문 이용
-			String uploadFileName = uploadFile.getOriginalFilename(); 
-			System.out.println("uplodaFileName : "+uploadFileName);
-			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1); // 경로가 있다면 원래 이름만 가져올 수 있도록
-			System.out.println("last file name : " + uploadFileName);
-			
+		} else {
+			// 변경 전 기존 이미지파일 삭제
+			String originalFilePath = PATH+"\\"+machineDao.mch_img(machine.getMch_num());
+		    File deleteFile = new File(originalFilePath);
+		    deleteFile.delete();
+		    
+		    // 새로운 이미지파일 생성
+			String uploadFileName = uploadFile.getOriginalFilename();
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); // 경로가 있다면 원래 이름만 가져올 수 있도록
 			UUID uuid = UUID.randomUUID();
 			uploadFileName = uuid.toString()+"_"+uploadFileName;
-			System.out.println("변환 후 파일이름 "+uploadFileName);
-			
-			File saveFile = new File(PATH, uploadFileName); //uploadFolder 위치에 uploadFileName으로 생성
+			File saveFile = new File(PATH, uploadFileName);
 			try {
-				uploadFile.transferTo(saveFile); // 스프링에서 제공하는 파일 객체를 자바 파일 객체로 변환
+				uploadFile.transferTo(saveFile);
 				machine.setMch_img(uploadFileName);
 			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-			} 
+				throw new Exception("이미지파일 등록 실패");
+			}
 		}
-		try {	
+		try {
+			navBar(session,m);
 			int rowCnt = machineDao.modify(machine);
-			if(rowCnt!=1) throw new Exception("modify Error");
-			ras.addFlashAttribute("msg","modify_success");
-			return "redirect:/facility"+sc.getQueryString();
+			if(rowCnt!=1) throw new Exception("기구정보 수정 실패");
+			ras.addFlashAttribute("msg","기구정보 수정 완료");
+			return "redirect:/menu2"+sc.getQueryString();
 		} catch(Exception e) {
-			e.printStackTrace();
-			m.addAttribute("machine",machine);
-			m.addAttribute("msg","modify_error");
-			m.addAttribute("m", "renew");
-			return "board_machines_regist";
+			ras.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/facility/write";
 		}
 	}
 	@PostMapping("/remove")
-	public String remove(Integer mch_num, SearchCondition sc, Model m, HttpSession session, HttpServletRequest hsReq, RedirectAttributes ras,String fileName, MultipartFile uploadFile) {
+	public String remove(Integer mch_num, SearchCondition sc, Model m, HttpSession session, RedirectAttributes ras,String fileName, MultipartFile uploadFile) {
 		try {
-			User user= navBar(session,m,hsReq);
-			if (user == null)
-				return "redirect:/login";
-			String user_type = user.getUser_type();
-			if (!user_type.equals("A"))
-				return "redirect:/login";
-			
-			String uploadFileName =machineDao.mch_img(mch_num);
-			String filePath = PATH+uploadFileName+"";
+			navBar(session,m);
+			String uploadFileName ="\\"+machineDao.mch_img(mch_num);
+			String filePath = PATH+uploadFileName;
 		    File deleteFile = new File(filePath);
 		    deleteFile.delete();
 			int rowCnt=machineDao.remove(mch_num);
-			if(rowCnt==1) {
-				ras.addFlashAttribute("msg","del");
-				return "redirect:/facility"+sc.getQueryString();
-			} else throw new Exception("board remove error");
+			if(rowCnt!=1) throw new Exception("기구정보 삭제 실패");
+			ras.addFlashAttribute("msg","기구정보가 삭제되었습니다.");
+			return "redirect:/menu2"+sc.getQueryString();
 		} catch(Exception e) {
-			e.printStackTrace();
-			ras.addFlashAttribute("msg","error");
+			ras.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/facility/write";
 		}
-		return "redirect:/facility"+sc.getQueryString();
 	}
 }

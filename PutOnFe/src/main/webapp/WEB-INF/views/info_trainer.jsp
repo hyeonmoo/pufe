@@ -24,13 +24,15 @@
 	<a href="<c:url value='/myPage'/>">마이페이지</a>
 	<a href="<c:url value='/login/logout'/>">로그아웃</a>
 </div>
+
 <script>
 $(function(){
-	var sked = ${todaySchedule};
+	var sked = ${todayString};
+	console.log(sked);
 	$(sked).each(function(i,t){
-		if(t.user_name=="null")
-			$("#sked").find("p[aria-label='"+t.pt_time+"']").find("span:last").text("휴무");
-		else $("#sked").find("p[aria-label='"+t.pt_time+"']").find("span:last").text(t.user_name+" 님");
+		if(t.name=="null")
+			$("#sked").find("p[aria-label='"+t.time+"']").find("span:last").text("휴무");
+		else $("#sked").find("p[aria-label='"+t.time+"']").find("span:last").text(t.name+" 님");
 	});
 });
 </script>

@@ -50,15 +50,9 @@ public class Ctrl_Home {
 		ptDao.decBookableNum();
 		ptDao.deleteExpiredRequest();
 		hMateDao.deleteExpiredMatching();
-		
-		List<Machine> machineList = machineDao.selectAllMachines();
-		List<Recommend> list = recDao.indexrec();
-		m.addAttribute("machineList", machineList);
-		m.addAttribute("list", list);
 
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
-
 		if(user == null) return "index";
 		Integer user_rank = userDao.userBig3Rank(user_email);
 		switch (user.getUser_type()) {
@@ -70,9 +64,13 @@ public class Ctrl_Home {
 			myClientList.removeIf(client->client.getTrainer()==null||!client.getTrainer().equals(user_email));
 			List<PTReserv> todayPTs = ptDao.reservList(user_email, user.getUser_type());
 			todayPTs.removeIf(pt->!pt.getPt_date().equals((LocalDate.now())));
+			String todayString="[";
+			for(PTReserv tp : todayPTs) todayString += "{name:'"+tp.getUser_name()+"', time:"+tp.getPt_time()+"},";
+			todayString = todayString.substring(0,todayString.length()-1);
+			todayString += "]";
 			m.addAttribute("clientNum",myClientList.size());
 			m.addAttribute("today",new Date());
-			m.addAttribute("todaySchedule",todayPTs);
+			m.addAttribute("todayString",todayString);
 			break;
 		case "U":
 			List<MyMatch> myMatches = hMateDao.confirmedPostOfUser(user_email);
@@ -86,8 +84,14 @@ public class Ctrl_Home {
 			m.addAttribute("userview", userDao.homeUserView(user_email));
 			break;
 		}
+		List<Machine> machineList = machineDao.selectAllMachines();
+		List<Recommend> recommendList = recDao.indexrec();
+		recommendList.removeIf(rec->(recommendList.indexOf(rec)>5));
+		
 		m.addAttribute("user", user);
 		m.addAttribute("rank", user_rank);
+		m.addAttribute("machineList", machineList);
+		m.addAttribute("recommendList", recommendList);
 		return "index";
 	}
 
@@ -143,7 +147,7 @@ public class Ctrl_Home {
 			List<Machine> machinelist = machineDao.search(sc);
 			m.addAttribute("machinelist", machinelist);
 			m.addAttribute("ph", ph);
-			return "board_machines";
+			return "machineList";
 		default:
 			return "redirect:/login";
 		}
@@ -169,7 +173,7 @@ public class Ctrl_Home {
 		navBar(session, m, hsReq);
 		List<Machine> machineList = machineDao.selectAllMachines();
 		m.addAttribute("machineList", machineList);
-		return "boarder_machines";
+		return "machineView";
 	}
 
 //	Big3 랭킹

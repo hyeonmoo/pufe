@@ -9,7 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>철좀들어-기구현황</title>
-    <link rel="stylesheet" href="${path }/resources/css/boarder_machines.css">
+    <link rel="stylesheet" href="${path }/resources/css/machineView.css">
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body>
 <%@ include file="navMenu.jsp" %>
@@ -29,7 +30,6 @@
 		</ul>
 	</c:forEach>
 </div>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 $('.detail').hover(function(){
 	$(this).parent().find('.caption').toggle()

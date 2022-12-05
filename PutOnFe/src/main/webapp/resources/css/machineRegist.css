@@ -29,11 +29,9 @@
 }
 
 input{
-	
-
 	background-color:#eee;
 	text-align: center;
-	cursor:pointer;
+	width:240px; height:30px;
 }
 textarea {
 	padding: 10px;
@@ -43,9 +41,15 @@ textarea {
 }
 .button{
 	float:right;
-	margin-bottom:20px;
-	
+	margin-bottom:20px;	
 }
-.button input{
-	border:0 solid black;
+.button>input[type=button]{
+	border:0;
+	width:100px;
+	border-radius:5px;
+	cursor:pointer;
+	background:#eee;
+}
+.button>input[type=button]:hover{
+	background:#ddd;
 }

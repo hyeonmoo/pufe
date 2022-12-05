@@ -14,7 +14,6 @@ public class TrainerInfo {
 	private	LocalDate	buy_date;
 	private	LocalDate	end_date;
 	private	int			pt_times;
-	private	int			pt_remain;
 	private	int			big3;
 	private	int			squat;
 	private	int			benchpress;
