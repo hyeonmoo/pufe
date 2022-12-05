@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.putupiron.pufe.dto.Goods;
-import com.putupiron.pufe.dto.Machine;
 
 @Repository
 public class GoodsDao_imp implements GoodsDao {

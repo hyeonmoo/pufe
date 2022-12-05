@@ -5,12 +5,8 @@
 	<!-- 상품타입설정 -->
 	<sql id="PTcontain">
 		<choose>
-			<when test='option=="noPT"'>
-				where PT=0
-			</when>
-			<when test='option=="yesPT"'>
-				where PT=1
-			</when>
+			<when test='option=="noPT"'>where PT=0</when>
+			<when test='option=="yesPT"'>where PT=1</when>
 		</choose>
 	</sql>
 	<!-- 모든 상품 조회 -->
@@ -19,17 +15,23 @@
 	</select>
 	<!-- 상품 구입 -->
 	<update id="purchase" parameterType="map">
-		update user left join goods
-		set prod_name=#{goods_name}, buy_date=now()<if test='option=="yesPT"'>, trainer="-", user.pt_times=goods.times</if>
+		update user
+		set prod_name=#{goods_name}, buy_date=date_format(now(),'%Y-%m-%d')
+		<if test='option=="yesPT"'>, trainer="-", user.pt_times=(select times from goods where goods_name=#{goods_name})</if>
 		where user_email=#{email}
 	</update>
+	<!-- 상품 정보 수정 -->
 	<update id="modifygoods" parameterType="Goods">
 		update goods
-		set  goods_name=#{goods_name},period=#{period},PT=#{PT},times=#{times},price=#{price}   where goods_no=#{goods_no}
+		set  goods_name=#{goods_name},period=#{period},PT=#{PT},times=#{times},price=#{price}
+		where goods_no=#{goods_no}
 	</update>
+	<!-- 신규 상품 등록 -->
 	<insert id="write" parameterType="Goods">
-		insert into goods (goods_no, goods_name, period,PT, times, price) values (#{goods_no}, #{goods_name}, #{period}, #{PT},#{times},  #{price})
+		insert into goods (goods_no, goods_name, period,PT, times, price)
+		values (#{goods_no}, #{goods_name}, #{period}, #{PT},#{times},#{price})
 	</insert>
+	<!-- 상품 삭제 -->
 	<delete id="remove" parameterType="map">
 		delete from goods where goods_no=#{goods_no}
 	</delete>

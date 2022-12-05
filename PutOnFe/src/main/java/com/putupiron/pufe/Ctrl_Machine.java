@@ -2,7 +2,6 @@ package com.putupiron.pufe;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import com.putupiron.pufe.dao.MachineDao;
 import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.Machine;
 import com.putupiron.pufe.dto.User;
-import com.putupiron.pufe.vo.PageHandler;
 import com.putupiron.pufe.vo.SearchCondition;
 
 @Controller
@@ -29,28 +27,16 @@ import com.putupiron.pufe.vo.SearchCondition;
 public class Ctrl_Machine {
 	@Autowired UserDao userDao;
 	@Autowired MachineDao machineDao;
+	//파일을 취급할 경로 설정
+	public static final String PATH ="C:\\SpringProjects\\resources\\pufe\\imgs";
 	
+	//세션정보와 이전 페이지 정보 저장
 	public User navBar(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
 		String user_email = (String)session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user",user);
 		m.addAttribute("from",hsReq.getServletPath());
 		return user;
-	}
-	@GetMapping()
-	public String facility(SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
-		User user = navBar(session,m,hsReq);
-		if (user == null)
-			return "redirect:/login";
-		String user_type = user.getUser_type();
-		if (!user_type.equals("A"))
-			return "redirect:/login";
-		int totalCnt = machineDao.searchCnt(sc);
-		PageHandler ph = new PageHandler(totalCnt, sc);
-		List<Machine> machinelist = machineDao.search(sc);
-		m.addAttribute("machinelist", machinelist);
-		m.addAttribute("ph", ph);
-		return "board_machines";
 	}
 	
 	@GetMapping("/read")
@@ -80,24 +66,16 @@ public class Ctrl_Machine {
 	}
 	@PostMapping("/write")
 	public String save( Machine machine,String FileName, MultipartFile uploadFile, Model m, HttpSession session, RedirectAttributes ras) {
-		String uploadFolder ="C:\\Users\\gkdlk\\git\\pufe\\pufe\\PutOnFe\\src\\main\\webapp\\resources\\img";
-		String uploadFileName = uploadFile.getOriginalFilename(); 
-		System.out.println("uplodaFileName : "+uploadFileName);
-		uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1); // 경로가 있다면 원래 이름만 가져올 수 있도록
-		System.out.println("last file name : " + uploadFileName);
+		String uploadFileName = uploadFile.getOriginalFilename();
+		uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); // 경로가 있다면 원래 이름만 가져올 수 있도록
 		
 		UUID uuid = UUID.randomUUID();
 		uploadFileName = uuid.toString()+"_"+uploadFileName;
-		System.out.println("변환 후 파일이름 "+uploadFileName);
 		
-		File saveFile = new File(uploadFolder, uploadFileName); 
+		File saveFile = new File(PATH, uploadFileName); 
 		try {
 			uploadFile.transferTo(saveFile); // 스프링에서 제공하는 파일 객체를 자바 파일 객체로 변환
 			machine.setMch_img(uploadFileName);
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-		} 
-		try {	
 			int rowCnt=machineDao.write(machine);
 			if(rowCnt!=1) throw new Exception("Write Error");
 			ras.addFlashAttribute("msg","write_success");
@@ -111,9 +89,6 @@ public class Ctrl_Machine {
 	}
 	@PostMapping("/modify")
 	public String modify(SearchCondition sc,String fileName,Integer del, MultipartFile uploadFile, RedirectAttributes ras, Machine machine, Model m, HttpSession session) throws Exception {
-		System.out.println("수정 모드 : "+del);
-		String uploadFolder = "C:\\Users\\gkdlk\\git\\pufe\\pufe\\PutOnFe\\src\\main\\webapp\\resources\\img";
-		String str="";
 		if(del==1) {
 			Machine mch=machineDao.read(machine.getMch_num());
 			machine.setMch_img(mch.getMch_img());
@@ -130,7 +105,7 @@ public class Ctrl_Machine {
 			uploadFileName = uuid.toString()+"_"+uploadFileName;
 			System.out.println("변환 후 파일이름 "+uploadFileName);
 			
-			File saveFile = new File(uploadFolder, uploadFileName); //uploadFolder 위치에 uploadFileName으로 생성
+			File saveFile = new File(PATH, uploadFileName); //uploadFolder 위치에 uploadFileName으로 생성
 			try {
 				uploadFile.transferTo(saveFile); // 스프링에서 제공하는 파일 객체를 자바 파일 객체로 변환
 				machine.setMch_img(uploadFileName);
@@ -162,7 +137,7 @@ public class Ctrl_Machine {
 				return "redirect:/login";
 			
 			String uploadFileName =machineDao.mch_img(mch_num);
-			String filePath = "C:\\Users\\gkdlk\\git\\pufe\\pufe\\PutOnFe\\src\\main\\webapp\\resources\\img\\"+uploadFileName+"";
+			String filePath = PATH+uploadFileName+"";
 		    File deleteFile = new File(filePath);
 		    deleteFile.delete();
 			int rowCnt=machineDao.remove(mch_num);
