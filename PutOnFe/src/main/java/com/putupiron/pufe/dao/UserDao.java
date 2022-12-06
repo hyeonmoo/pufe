@@ -15,6 +15,8 @@ public interface UserDao {
 	User selectUser(String user_email) throws Exception;
 	// 해당 양식으로 회원가입
 	int	join(JoinData joinData) throws Exception;
+	// 해당 전화번호로 가입된 계정 조회
+	User selectByTel(String user_tel) throws Exception;
 	// 해당 이름과 전화번호로 등록된 이메일 조회
 	String findEmail(String name, String phone) throws Exception;
 	// 해당 정보와 일치하는 계정정보 조회(왜 유저를 리턴 안했지?)

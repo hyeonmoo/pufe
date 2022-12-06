@@ -28,10 +28,8 @@ public class Ctrl_Goods {
 		return user;
 	}
 	@GetMapping()
-	public String ptOption(String option, HttpSession session, Model m) throws Exception{
-		navBar(session, m);
-		m.addAttribute(goodsDao.allGoods(option));
-		return "menu_user1";
+	public String ptOption(String option) throws Exception{
+		return "redirect:/menu1?viewType="+option;
 	}
 	@PostMapping("/purchase")
 	public String purchase(String goods_name,HttpSession session, Model m, RedirectAttributes ras) throws Exception{

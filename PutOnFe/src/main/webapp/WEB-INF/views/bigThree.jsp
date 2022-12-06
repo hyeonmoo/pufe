@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>철좀들어-Big3 랭킹</title>
 	<link rel="stylesheet" href="${path}/resources/css/bigThree.css">
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body>
 <%@ include file="navMenu.jsp" %>

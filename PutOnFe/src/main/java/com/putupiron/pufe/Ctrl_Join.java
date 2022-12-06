@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.JoinData;
-import com.putupiron.pufe.dto.User;
 import com.putupiron.pufe.validator.Validator_join;
 
 @Controller
@@ -27,16 +26,19 @@ public class Ctrl_Join {
 	}
 	@PostMapping("/join")
 	public String join(Model m, @Valid JoinData joinData, BindingResult br, RedirectAttributes ras) throws Exception{
-		User user = userDao.selectUser(joinData.getUser_email());
-		if(user!=null) br.rejectValue("user_email", "해당 이메일로 가입한 계정이 이미 존재합니다.");
+		if(userDao.selectUser(joinData.getUser_email())!=null)
+			br.rejectValue("user_email", "해당 이메일로 가입한 계정이 이미 존재합니다.");
+		if(userDao.selectByTel(joinData.getUser_tel())!=null)
+			br.rejectValue("user_email", "해당 전화번호로 가입한 계정이 이미 존재합니다.");
 		if(br.hasErrors()) {
-			m.addAttribute("msg",br.getFieldError().getCode());
-			return "join";
+			ras.addFlashAttribute("msg",br.getFieldError().getCode());
+			ras.addFlashAttribute("join",joinData); //회원가입 실패 시 기존 데이터 유지(비밀번호 제외)
+			return "redirect:/join";
 		}
-		int joinResult=userDao.join(joinData);
-		if(joinResult!=1) {
-			m.addAttribute("msg","알 수 없는 이유로 회원가입에 실패했습니다.");
-			return "join";
+		if(userDao.join(joinData)!=1) {
+			ras.addFlashAttribute("msg","알 수 없는 이유로 회원가입에 실패했습니다.");
+			ras.addFlashAttribute("join",joinData);
+			return "redirect:/join";
 		}
 		ras.addFlashAttribute("msg","회원가입이 성공적으로 완료됐습니다.");
 		return "redirect:login";

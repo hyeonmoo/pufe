@@ -20,7 +20,7 @@
 	<c:forEach items="${machineList}" var="machine">
 		<ul class="btn_toggle">
 			<li class="product_img">
-				<img src="${path}/resources/img/${machine.mch_img }">
+				<img src="${path+='/uploadImgs/'+=machine.mch_img}">
 				<br><br>
 				<button class="detail" >세부사항</button>
 				<textarea  rows="7" cols="35" class="caption" readonly>${machine.mch_detail}</textarea>

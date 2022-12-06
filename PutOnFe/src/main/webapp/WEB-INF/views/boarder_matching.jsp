@@ -331,13 +331,13 @@ $(document).on("click",".time",function(){
 
 // 이벤트 발생시 리스트 최신화
 function getList(){
-	part=$(".part.checked").attr("aria-label");
-	if($(".date.checked").attr("type")=="text")
+	part=$(".part.checked").attr("aria-label"); //파트 선택
+	if($(".date.checked").attr("type")=="text") //구체적 날짜X
 		date=$(".date.checked").val();
-	else date=$(".date.checked").attr("aria-label");
-	if($(".time.checked").attr("type")=="text")
+	else date=$(".date.checked").attr("aria-label"); //구체적 날짜 선택
+	if($(".time.checked").attr("type")=="text") //구체적 시간대X
 		time=$(".time.picker:first").val()+"~"+$(".time.picker:last").val();
-	else time=$(".time.checked").attr("aria-label");
+	else time=$(".time.checked").attr("aria-label"); //구체적 시간대 선택
 	data={part:part,dateOption:date,timeOption:time};
 	
 	$.ajax({

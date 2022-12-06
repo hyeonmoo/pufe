@@ -31,6 +31,10 @@ public class UserDao_imp implements UserDao {
 		return session.insert(namespace+"join",joinData);
 	}
 	@Override
+	public User selectByTel(String user_tel) throws Exception {
+		return session.selectOne(namespace+"selectByTel",user_tel);
+	}
+	@Override
 	public String findEmail(String name, String phone) throws Exception {
 		Map<String,String> map = new HashMap<>();
 		map.put("name", name);

@@ -10,6 +10,10 @@
 	<insert id="join" parameterType="JoinData">
 		insert into user values(#{user_email},#{user_pw},#{user_name},#{gender},#{user_tel},"U",null,null,null,0,0,0,0)
 	</insert>
+	<!-- 해당 연락처로 가입한 계정 찾기 -->
+	<select id="selectByTel" parameterType="String" resultType="User">
+		select * from user where user_tel= #{user_tel}
+	</select>
 	<!-- 이메일찾기 -->
 	<select id="findEmail" parameterType="map" resultType="String">
 		select user_email from user where <if test='type=="R"'>user_email=#{email} and</if> user_name=#{name} and user_tel=#{phone}

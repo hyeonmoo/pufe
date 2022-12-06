@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="${path}/resources/css/navMenu.css">
-<script src="http://code.jquery.com/jquery-latest.js"></script>
 <nav class="nav_menu">
 	<div class="logo"><a href="<c:url value='/'/>"></a></div>
 	<div><a href="<c:url value='/recommend'/>">헬스추천정보</a></div>

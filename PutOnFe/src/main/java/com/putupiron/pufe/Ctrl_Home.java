@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.putupiron.pufe.dao.GoodsDao;
@@ -102,10 +103,11 @@ public class Ctrl_Home {
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user", user);
-		m.addAttribute("from",hsReq.getServletPath()); //로그인 버튼이 아닌 다른 버튼을 누르고 로그인창에 진입했을 때 로그인 성공시 그 버튼으로 이동했어야 할 페이지의 ServletPath를 모델에 저장
+		m.addAttribute("from",hsReq.getServletPath()); 
 		return user;
 	}
-
+	
+	//로그인 버튼이 아닌 다른 버튼을 누르고 로그인창에 진입했을 때 로그인 성공시 그 버튼으로 이동했어야 할 페이지의 ServletPath를 모델에 저장
 //	메뉴버튼1
 	@GetMapping("/menu1")
 	public String menu1(String viewType, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
@@ -114,7 +116,8 @@ public class Ctrl_Home {
 			return "login"; //안했음 가세요~
 		switch (user.getUser_type()) {
 		case "U": //일반회원->상품구매 창으로 이동
-			List<Goods> goodsList = goodsDao.allGoods("noPT"); //모든 상품정보 로드(초기화면을 기간권으로 설정하기 위해 옵션은 noPT)
+			if(viewType==null) viewType="noPT"; //초기화면을 기간권으로 설정
+			List<Goods> goodsList = goodsDao.allGoods(viewType); //모든 상품정보 로드
 			for(Goods goods:goodsList) goods.setEnd_date(LocalDate.now().plusDays(goods.getPeriod()*30)); // 현재날짜 기준 각 상품 구매시 만료일자를 저장
 			m.addAttribute("goodsList", goodsList);
 			return "menu_user1";
@@ -136,11 +139,19 @@ public class Ctrl_Home {
 
 //	메뉴버튼2
 	@GetMapping("/menu2")
-	public String menu2(SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+	public String menu2(SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq, RedirectAttributes ras) throws Exception {
 		User user = navBar(session, m, hsReq);
 		if (user == null) return "login";
 		switch (user.getUser_type()) {
-		case "U": return "menu_user2";
+		case "U": 
+			if(!user.getProd_name().contains("PT")) {
+				ras.addFlashAttribute("msg","PT이용권을 구매한 회원만 이용 가능합니다.");
+				return "redirect:/";
+			} else if(user.getTrainer().equals("-")) {
+				ras.addFlashAttribute("msg","아직 전담 트레이너가 배정되지 않았습니다. 관리자에게 문의 바랍니다.");
+				return "redirect:/";
+			}
+			return "menu_user2";
 		case "T": return "menu_trainer2";
 		case "A":
 			int totalCnt = machineDao.searchCnt(sc);
@@ -203,21 +214,21 @@ public class Ctrl_Home {
 	@PostMapping("/matching")
 	public String matching(MatchCondition mc,HttpSession session, Model m, HttpServletRequest hsReq) throws Exception{
 		User user = navBar(session,m,hsReq);
-		mc.setDatePeriod(mc.getDateOption());
+		mc.setDatePeriod(mc.getDateOption()); // 선택한 옵션으로 검색 기간 설정
 		mc.setTimePeriod(mc.getTimeOption());
-		int userBig3=user.getSquat()+user.getBenchpress()+user.getDeadlift();
-		List<HealthMate_Post> hmpList = hMateDao.postList(mc);
-		HealthMate_Post recommendedPost=null;
-		if(hmpList.size()!=0) {
-			hmpList.removeIf(hmp->hmp.getPoster().equals(user.getUser_email())); //ArrayList 안의 해당 람다식조건을 만족하는 요소 제거
-			for(HealthMate_Post hmp:hmpList) hmp.setPoster_big3(hmp.getPoster_big3()-userBig3);
-			boolean hasPositive=false;
-			for(HealthMate_Post hmp:hmpList) if(hmp.getPoster_big3()>=0) hasPositive=true;
-			if(hasPositive) {
-				hmpList.removeIf(hmp->hmp.getPoster_big3()<0);
-				recommendedPost=hmpList.get(hmpList.size()-1);
-			} else recommendedPost=hmpList.get(0);
-			recommendedPost.setPoster_big3(recommendedPost.getPoster_big3()+userBig3);
+		int userBig3=user.getSquat()+user.getBenchpress()+user.getDeadlift(); // 로그인 한 유저의 BIG3기록 저장
+		List<HealthMate_Post> hmpList = hMateDao.postList(mc); // 옵션을 만족하는 포스트를 전부 호출(BIG3 내림차순)
+		HealthMate_Post recommendedPost=null; // 매칭할 포스트 선언
+		if(hmpList.size()!=0) { // 검색된 포스팅이 있다면
+			hmpList.removeIf(hmp->hmp.getPoster().equals(user.getUser_email())); // 내꺼 있으면 지워
+			for(HealthMate_Post hmp:hmpList) hmp.setPoster_big3(hmp.getPoster_big3()-userBig3); // 포스팅 올린 유저들의 BIG3에서 내 기록 빼기
+			boolean hasPositive=false; // valid 변수 선언
+			for(HealthMate_Post hmp:hmpList) if(hmp.getPoster_big3()>=0) hasPositive=true; // 뺀 결과값 중 양수가 있으면 true로 전환
+			if(hasPositive) { // 양수가 있으면 -> 나보다 잘 치는 사람이 있으면
+				hmpList.removeIf(hmp->hmp.getPoster_big3()<0); // 음수, 즉 나보다 못치는 사람들 포스트 전부 삭제
+				recommendedPost=hmpList.get(hmpList.size()-1); // 그럼 제일 뒤에있는 사람이 나랑 가장 기록이 비슷한 사람
+			} else recommendedPost=hmpList.get(0); // 싹 다 음수다 -> 다 나보다 못 친다 -> 제일 앞사람이 그나마 나랑 비슷한 사람
+			recommendedPost.setPoster_big3(recommendedPost.getPoster_big3()+userBig3); // 뺐던 값 돌려주기
 		}
 		m.addAttribute("mc",mc);
 		m.addAttribute("recommend",recommendedPost);

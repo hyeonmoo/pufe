@@ -197,10 +197,8 @@ function buildTimeTable(listMap){
 	
 	$("#timeTable>tbody td").remove();
 	$("#timeTable>tbody>tr").remove();
-	
 	// 시간표 상단부에 선택한 날짜 년월일 출력
 	$("#tableHead").text(nowY+"년 "+(nowM+1)+"월 "+nowD+"일");
-	
 	// 시간표에 선택한 날짜와 해당 시간을 속성으로 부여하면서 생성
 	$("#timeTable>tbody").append("<tr>");
 	for(i=9;i<21;i++){

@@ -6,7 +6,7 @@
 <c:when test="${big3<200 }">
 	<img src="${path}/resources/img/anchovy.png">
 </c:when>
-<c:when test="${big3<=200 && big3<300 }">
+<c:when test="${200<=big3 && big3<300 }">
 	<img src="${path}/resources/img/anchovy2.png">
 </c:when>
 <c:when test="${300<=big3 && big3<400 }">

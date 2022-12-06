@@ -23,32 +23,32 @@ public class MatchCondition {
 	private static final int WHOLE_PERIOD=15;
 	
 	public void setDatePeriod(String dateOption) {
-		String datePattern = "^\\d{4}-\\d{2}-\\d{2}$";
-		if(Pattern.matches(datePattern, dateOption)) {
-			String[] strArr = dateOption.split("-");
+		String datePattern = "^\\d{4}-\\d{2}-\\d{2}$"; //yyyy-MM-dd 정규식
+		if(Pattern.matches(datePattern, dateOption)) { //정규식을 만족하면 -> 구체적인 날짜를 선택했다면
+			String[] strArr = dateOption.split("-"); //쪼개서
 			List<Integer> dateList = new ArrayList<>();
-			for(String str:strArr) dateList.add(Integer.parseInt(str));
+			for(String str:strArr) dateList.add(Integer.parseInt(str)); //정수로 바꿔 리스트에 저장
 			this.startDate = LocalDate.of(dateList.get(0),dateList.get(1),dateList.get(2));
-			this.endDate = this.startDate.plusDays(1);
-		} else {
-			LocalDate now = LocalDate.now();
-			switch(dateOption) {
-			case "all":
-				this.startDate = now;
-				this.endDate = now.plusDays(WHOLE_PERIOD);
+			this.endDate = this.startDate.plusDays(1); // 시작 날짜와 끝 날짜 설정
+		} else { //정규식을 만족하지 못하면 -> 기간을 선택했다면
+			LocalDate now = LocalDate.now(); //현재날짜를 가리키는 LocalDate객체 생성
+			switch(dateOption) { //설정 값좀 보자
+			case "all": //전체
+				this.startDate = now; //지금부터
+				this.endDate = now.plusDays(WHOLE_PERIOD); // 2주 뒤, 즉 모두
 				break;
-			case "tomorrow":
-				this.startDate = now;
-				this.endDate = now.plusDays(2);
+			case "tomorrow": //내일까지
+				this.startDate = now; //오늘부터
+				this.endDate = now.plusDays(2); //미만이므로 2를 더해야 내일도 포함됨
 				break;
-			case "weekend":
-				LocalDate weekend = now;
+			case "weekend": //주말동안
+				LocalDate weekend = now; // 현재날짜를 가리키는 객체 하나 더 생성
 				while(weekend.getDayOfWeek()!=DayOfWeek.SATURDAY)
-					weekend=weekend.plusDays(1);
-				this.startDate = weekend;
-				this.endDate = weekend.plusDays(2);
+					weekend=weekend.plusDays(1); //토요일이 될 때까지 다음날로 넘김
+				this.startDate = weekend; //토요일이 된 weekend를 저장
+				this.endDate = weekend.plusDays(2); //일요일 저장
 				break;
-			case "recent7":
+			case "recent7": //최근 일주일
 				this.startDate = now;
 				this.endDate = now.plusDays(7);
 				break;
