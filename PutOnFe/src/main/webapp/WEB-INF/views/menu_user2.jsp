@@ -178,8 +178,10 @@ function buildCal(listMap){
 			$(date).addClass("disabled");
 		//유저가 예약/신청한 날짜 표시
 		$(userList).each(function(i,d){
-			if(formatDate(new Date(d.pt_date))==formatDate(new Date(nowY,nowM,$(date).text())))
+			if(formatDate(new Date(d.pt_date))==formatDate(new Date(nowY,nowM,$(date).text()))){
+				$(date).removeClass("disabled");
 				$(date).addClass(d.request);
+			}
 		});
 	});
 }

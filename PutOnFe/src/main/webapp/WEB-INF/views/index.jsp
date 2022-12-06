@@ -120,6 +120,12 @@
 <script>
 let msg= "${msg}";
 if(msg!="") alert(msg);
+//추천 운동 정보 제목이 20자를 넘길 경우 뒷내용 삭제
+let rec_title = $(".contents.list>li>a");
+$(rec_title).each(function(i,title){
+	if($(this).text().length>20)
+		$(this).text($(this).text().substring(0,20)+"...");
+});
 //이미지 슬라이드 버튼
 let img_cnt=0;
 let imgs=$('.slide').find('img');

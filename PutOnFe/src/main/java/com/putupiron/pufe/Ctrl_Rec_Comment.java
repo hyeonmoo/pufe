@@ -16,75 +16,64 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.putupiron.pufe.dao.Rec_CommentService;
+import com.putupiron.pufe.dao.UserDao;
 import com.putupiron.pufe.dto.Rec_Comment;
+import com.putupiron.pufe.dto.User;
 
-// @ResponseBody : 이 클래스에 있는 모든 메서드에 적용
-// @Controller + @ResponseBody = @RestController
 @Controller
 public class Ctrl_Rec_Comment {
 
-	@Autowired
-	Rec_CommentService service;
-
-	@GetMapping("/rec")
-	public String test() {
-		return "rec_comment";
+	@Autowired Rec_CommentService service;
+	@Autowired UserDao userDao;
+	
+	// 세션의 유저정보 로드
+	public User navBar(HttpSession session) throws Exception {
+		String user_email = (String)session.getAttribute("email");
+		User user = userDao.selectUser(user_email);
+		return user;
 	}
-
-	// 댓글을 등록하는 메서드
-	@ResponseBody
-	@PostMapping(value="/comments")
-	public ResponseEntity<String> write(@RequestBody Rec_Comment dto, Integer rec_num, HttpSession session) {
-		String user_email = (String) session.getAttribute("email");
-		dto.setUser_email(user_email);
-		dto.setRec_num(rec_num);
-		
-		try {
-			int cnt = service.write(dto);
-			if (cnt != 1)
-				throw new Exception("Write Error");
-			return new ResponseEntity<>("good", HttpStatus.OK);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ResponseEntity<>("WRITE_ERR", HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	// 지정된 댓글을 삭제하는 메서드
-	@DeleteMapping("/comments/{rec_com_num}") // comments/1?bno=1085 <- 삭제할 댓글 번호
-	@ResponseBody
-	public ResponseEntity<String> remove(@PathVariable Integer rec_com_num, Integer rec_num, HttpSession session) {
-		String user_email = (String) session.getAttribute("email");
-		System.out.println(rec_com_num + "," + rec_num);
-		try {
-			int rowCnt = service.remove(rec_com_num, rec_num, user_email);
-			if (rowCnt != 1) {
-				throw new Exception("delete failed");
-			}
-			return new ResponseEntity<>("good", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("DEL_ERR", HttpStatus.BAD_REQUEST);
-		}
-
-	}
-
 	// 지정된 게시물의 모든 댓글을 가져오는 메서드
-	@GetMapping("/comments")
 	@ResponseBody
+	@GetMapping("/comments")
 	public ResponseEntity<List<Rec_Comment>> list(Integer rec_num) {
 		List<Rec_Comment> list = null;
 		try {
 			list = service.getList(rec_num);
-			// 예외가 발생되어도 상태코드가 200번대
 			return new ResponseEntity<List<Rec_Comment>>(list, HttpStatus.OK);
 		} catch (Exception e) {
-
-			e.printStackTrace();
 			return new ResponseEntity<List<Rec_Comment>>(list, HttpStatus.BAD_REQUEST);
+		}
+	}
+	// 댓글을 등록하는 메서드
+	@ResponseBody
+	@PostMapping(value="/comments", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> write(@RequestBody Rec_Comment dto, Integer rec_num, HttpSession session) {
+		try {
+			User user = navBar(session);
+			dto.setUser_email(user.getUser_email());
+			dto.setRec_num(rec_num);
+			int cnt = service.write(dto);
+			if (cnt != 1) throw new Exception("댓글 등록에 실패했습니다.");
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 지정된 댓글을 삭제하는 메서드
+	@ResponseBody
+	@DeleteMapping(value="/comments/{rec_com_num}", produces="application/text;charset=utf-8")
+	public ResponseEntity<String> remove(@PathVariable Integer rec_com_num, Integer rec_num, HttpSession session) {
+		try {
+			User user = navBar(session);
+			int rowCnt = service.remove(rec_com_num, rec_num, user.getUser_email());
+			if (rowCnt != 1) {
+				throw new Exception("댓글 삭제 실패");
+			}
+			return new ResponseEntity<>("댓글을 삭제했습니다.", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
-
 }

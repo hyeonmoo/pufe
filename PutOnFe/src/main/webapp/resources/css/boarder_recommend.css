@@ -1,5 +1,5 @@
 .container{
-	width:900px;
+	width:1200px;
 	margin: 100px auto 0 auto;
 }
 .container>h1{
@@ -32,36 +32,71 @@
 	text-align:center;
 	padding:15px 0;
 }
-.currentUser{
-	background-color: rgb(70,140,160) !important;
-	color:white;
-}
-.container a:hover {
-  text-decoration: underline;
-}
 .pagination {
 	text-align:center;
 	 list-style:none;
 }
+.container td>a:hover {
+  text-decoration: underline;
+}
+.tools{position:relative;}
+.tools>button{
+	display:inline-block;
+	position:absolute;
+	top:0; right:0;
+	width:100px; height:30px;
+	border-radius:5px;
+	border:0;
+	cursor:pointer;
+	background:#ddd;
+	font-size:15px;
+}
+.tools>button:hover{
+	background:#ccc;
+}
+.tools .searchBox{
+	width:100%;
+	display:flex;
+	justify-content:flex-start;
+	align-items:center;
+}
+.searchBox select{
+	width:100px; height:30px;
+	font:15px/30px mbng;
+	text-align:center;
+}
+.searchBox select>option{
+	font:13px/30px mbng;
+}
+.searchBox input[type=text]{
+	width:240px; height:30px;
+	font:15px/30px mbng;
+}
+.searchBox input[type=submit]{
+	width:60px; height:30px;
+	border-radius:5px;
+	border:0;
+	background : #ddd;
+	cursor:pointer;
+}
+.searchBox input[type=submit]:hover{
+	background:#ccc;
+}
+.pagination {
+	text-align:center;
+	list-style:none;
+	margin-top:10px;
+}
 .pagination>li>a{
-	
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
+	display:inline-block;
+	width:30px; height:30px;
+    line-height: 30px;
     color: black;
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #ddd;
 }
-input{
-	border:0 solid black;
-	background-color:#eee;
-	text-align: center;
-	cursor:pointer;
+.pagination>li>a:hover{
+	background:#eee;
 }
-button{
-	border:0 solid black;
-	background-color:#eee;
-	text-align: center;
-	cursor:pointer;
-}
+

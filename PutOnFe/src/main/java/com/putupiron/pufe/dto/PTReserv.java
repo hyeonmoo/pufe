@@ -3,6 +3,8 @@ package com.putupiron.pufe.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class PTReserv {
 	private Integer		pt_no;
 	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonSerialize(using=LocalDateSerializer.class)
 	private	LocalDate	pt_date;
 	private Integer		pt_time;
 	private	String		trainer_email;

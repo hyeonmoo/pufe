@@ -1,7 +1,3 @@
-@font-face {
-    font-family: mbng;
-    src: url(../fonts/Mabinogi_Classic_OTF.woff);
-}
 ul{list-style:none;}
 ::-webkit-scrollbar{
 	width:12px; 

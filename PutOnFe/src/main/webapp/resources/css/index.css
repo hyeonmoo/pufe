@@ -72,6 +72,9 @@ li{list-style: none;}
     justify-content:center;
     align-items:center;
 }
+.contents.list>li>*{
+	font:0.8em mbng;
+}
 .contents.list>li>span{
 	display:inline-block;
 	text-align:center;
@@ -82,6 +85,7 @@ li{list-style: none;}
 .contents.list>li>span:last-child{
 	width:40%;
 }
+.contents.list>li>a:hover{text-decoration:underline;}
 /* 이미지 슬라이드형 콘텐츠 */
 .contents.slide>img{
 	display:none;

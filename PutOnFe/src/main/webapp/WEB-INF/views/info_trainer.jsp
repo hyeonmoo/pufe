@@ -28,11 +28,10 @@
 <script>
 $(function(){
 	var sked = ${todayString};
-	console.log(sked);
-	$(sked).each(function(i,t){
-		if(t.name=="null")
-			$("#sked").find("p[aria-label='"+t.time+"']").find("span:last").text("휴무");
-		else $("#sked").find("p[aria-label='"+t.time+"']").find("span:last").text(t.name+" 님");
+	$(sked).each(function(index,pt){
+		if(pt.user_name==null)
+			$("#sked").find("p[aria-label='"+pt.pt_time+"']").find("span:last").text("휴무");
+		else $("#sked").find("p[aria-label='"+pt.pt_time+"']").find("span:last").text(pt.user_name+" 님");
 	});
 });
 </script>

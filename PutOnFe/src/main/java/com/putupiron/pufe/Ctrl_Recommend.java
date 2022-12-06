@@ -36,7 +36,7 @@ public class Ctrl_Recommend {
 	@GetMapping("/read")
 	public String read(Integer rec_num, SearchCondition sc, HttpSession session, Model m, HttpServletRequest hsReq) {
 		try {
-			navBar(session,m,hsReq);
+			User user = navBar(session,m,hsReq);
 			Recommend recommend=recDao.read(rec_num);
 			m.addAttribute("recommend",recommend);
 			m.addAttribute("mode","read");
@@ -49,64 +49,73 @@ public class Ctrl_Recommend {
 	
 //	게시물 쓰기 페이지 이동
 	@GetMapping("/write")
-	public String write(HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
+	public String write(HttpSession session, SearchCondition sc, Model m, HttpServletRequest hsReq, RedirectAttributes ras) throws Exception {
 		User user= navBar(session,m,hsReq);
 		if(user==null) return "redirect:/login";
+		if(user.getUser_type().equals("U")) {
+			ras.addFlashAttribute("msg","관리자와 트레이너만 작성할 수 있습니다.");
+			return "redirect:/recommend"+sc.getQueryString();
+		}
 		m.addAttribute("mode","write");
 		return "board_recommend";
 	}
 	
 //	게시물 등록 버튼
 	@PostMapping("/write")
-	public String save(Recommend recommend, Model m, HttpSession session, RedirectAttributes ras) {
+	public String save(Recommend recommend, Model m, HttpSession session, RedirectAttributes ras, HttpServletRequest hsReq) {
 		try {
-			String user_email = (String)session.getAttribute("email");
-			recommend.setUser_email(user_email);
+			User user = navBar(session,m,hsReq);
+			recommend.setUser_email(user.getUser_email());
+			if(user.getUser_type().equals("U")) {
+				ras.addFlashAttribute("msg","관리자와 트레이너만 작성할 수 있습니다.");
+				return "redirect:/read";
+			}
 			int rowCnt=recDao.write(recommend);
-			if(rowCnt!=1) throw new Exception("Write Error");
-			ras.addFlashAttribute("msg","write_success");
+			if(rowCnt!=1) throw new Exception("게시글 등록에 실패했습니다. 다시 시도해주세요.");
+			ras.addFlashAttribute("msg","게시글 등록을 완료했습니다.");
 			return "redirect:/recommend";
 		} catch(Exception e) {
-			e.printStackTrace();
-			m.addAttribute("recommend", recommend);
-			m.addAttribute("msg", "write_error");
-			return "board_recommend";
+			ras.addFlashAttribute("recommend", recommend);
+			ras.addFlashAttribute("msg", e.getMessage());
+			return "redirect:/recommend/write";
 		}
 	}
 	
 //	게시물 수정 버튼
 	@PostMapping("/modify")
-	public String modify(SearchCondition sc, RedirectAttributes ras, Recommend recommend, HttpSession session, Model m) {
+	public String modify(SearchCondition sc, RedirectAttributes ras, Recommend recommend, HttpSession session, Model m, HttpServletRequest hsReq) {
 		try {
-			String user_email = (String)session.getAttribute("email");
-			recommend.setUser_email(user_email);
+			User user = navBar(session,m,hsReq);
+			recommend.setUser_email(user.getUser_email());
+			if(user.getUser_type().equals("U")) {
+				ras.addFlashAttribute("msg","관리자와 트레이너만 수정할 수 있습니다.");
+				return "redirect:/read";
+			}
 			int rowCnt = recDao.modify(recommend);
-			if(rowCnt!=1) throw new Exception("modify Error");
-			ras.addFlashAttribute("msg","modify_success");
+			if(rowCnt!=1) throw new Exception("게시물 수정에 실패했습니다. 다시 시도해주세요.");
+			ras.addFlashAttribute("msg","게시물 수정을 완료했습니다.");
 			return "redirect:/recommend"+sc.getQueryString();
 		} catch(Exception e) {
-			e.printStackTrace();
-			m.addAttribute("recommend",recommend);
-			m.addAttribute("msg","modify_error");
-			return "board_recommend";
+			ras.addFlashAttribute("recommend", recommend);
+			ras.addFlashAttribute("msg", e.getMessage());
+			return "redirect:/recommend/write";
 		}
 	}
 	
 //	게시물 삭제 버튼
 	@PostMapping("/remove")
-	public String remove(Integer rec_num, SearchCondition sc, Model m, HttpSession session, RedirectAttributes ras) {
+	public String remove(Integer rec_num, SearchCondition sc, Model m, HttpSession session, RedirectAttributes ras, HttpServletRequest hsReq) {
 		try {
-			String user_email = (String)session.getAttribute("email");
-			
-			int rowCnt=recDao.remove(rec_num, user_email);
-			if(rowCnt==1) {
-				ras.addFlashAttribute("msg","del");
-				return "redirect:/recommend"+sc.getQueryString();
-			} else throw new Exception("board remove error");
+			User user = navBar(session,m,hsReq);
+			if(user.getUser_type().equals("U"))
+				throw new Exception("관리자와 트레이너만 삭제할 수 있습니다.");
+			int rowCnt=recDao.remove(rec_num, user.getUser_email());
+			if(rowCnt!=1) throw new Exception("게시물 삭제에 실패했습니다.");
+			ras.addFlashAttribute("msg","게시물 삭제 완료");
+			return "redirect:/recommend"+sc.getQueryString();
 		} catch(Exception e) {
-			e.printStackTrace();
-			ras.addFlashAttribute("msg","error");
+			ras.addFlashAttribute("msg",e.getMessage());
+			return "redirect:/recommend/read";
 		}
-		return "redirect:/recommend"+sc.getQueryString();
 	}
 }

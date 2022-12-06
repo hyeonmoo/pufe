@@ -37,10 +37,10 @@
 				<fmt:formatDate var="rec_date" value="${board.rec_date}" pattern="yyyy-MM-dd"/>
 		         <c:choose>	
 		            <c:when test="${ today<=rec_date}">
-		              <td class="regdate"><fmt:formatDate value="${board.rec_date}" pattern="HH:mm" type="time"/></td>
+		              <td><fmt:formatDate value="${board.rec_date}" pattern="HH:mm" type="time"/></td>
 		            </c:when>
 		            <c:otherwise>
-		              <td class="regdate"><fmt:formatDate value="${board.rec_date}" pattern="yyyy-MM-dd" type="date"/></td>
+		              <td><fmt:formatDate value="${board.rec_date}" pattern="yyyy-MM-dd" type="date"/></td>
 		            </c:otherwise>
 		          </c:choose>
 				
@@ -49,44 +49,36 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<div id="tools">
-		<button type="button" class="btn" id="writeBtn" onclick="location.href='<c:url value="/recommend/write"/>'" style="float:right;">글쓰기</button>
-		<div class="search-container">
-			<form action="<c:url value="/recommend"/>" class="search-form" method="get">
-				<select class="form-control" name="option">
+	<div class="tools">
+		<c:if test="${user.user_type=='A'||user.user_type=='T' }">
+			<button onclick="location.href='<c:url value="/recommend/write"/>'">글쓰기</button>
+		</c:if>
+		<div class="searchBox">
+			<form action="<c:url value="/recommend"/>" method="get">
+				<select name="option">
 					<option value="A" ${ph.sc.option=='A' || ph.sc.option=='' ? "selected":""}>제목+내용</option>
 					<option value="T" ${ph.sc.option=='T'? "selected":""}>제목</option>
 					<option value="C" ${ph.sc.option=='C'? "selected":""}>내용</option>
 				</select>
-				<input type="text" name="keyword" class="form-control" value="${ph.sc.keyword }" placeholder="검색어 입력">
-				<input type="submit" class="btn" value="검색">
+				<input type="text" name="keyword" value="${ph.sc.keyword }" placeholder="검색어 입력">
+				<input type="submit" value="검색">
 			</form>
 		</div>
-		
+		<ul class="pagination">
+			<li><c:if test="${ph.showPrev }">
+					<a href="<c:url value='/recommend${ph.sc.getQueryString(ph.beginPage-1)} ' />">&laquo;</a>
+				</c:if></li>
+			<li><c:forEach var="i" begin="${ph.beginPage }" end="${ph.endPage }">
+				<a href="<c:url value='/recommend${ph.sc.getQueryString(i)}'/>">${i}</a>
+			</c:forEach></li>
+			<li><c:if test="${ph.showNext }">
+					<a href="<c:url value='/recommend${ph.sc.getQueryString(ph.endPage+1)}'/>">&raquo;</a>
+			</c:if></li>
+		</ul>
 	</div>
-	<br>
-<div>
-			<ul class="pagination">
-				<li><c:if test="${ph.showPrev }">
-						<a
-							href="<c:url value='/recommend${ph.sc.getQueryString(ph.beginPage-1) } ' />">&laquo;</a>
-					</c:if></li>
-				<li><c:forEach var="i" begin="${ph.beginPage }"
-						end="${ph.endPage }">
-						<a href="<c:url value='/recommend${ph.sc.getQueryString(i) }'/>">${i }</a>
-					</c:forEach></li>
-				<li><c:if test="${ph.showNext }">
-						<a
-							href="<c:url value='/recommend${ph.sc.getQueryString(ph.endPage+1) }'/>">&raquo;</a>
-					</c:if></li>
-			</ul>
-		</div>
 </div>
 <script>
-	let msg="${msg}";
-	if(msg=="del") alert("성공적으로 삭제되었습니다.");
-	if(msg=="error") alert("삭제에 실패했습니다.");
-	if(msg=="write_success") alert("성공적으로 등록되었습니다.");
+if("${msg}"!="") alert("${msg}");
 </script>
 </body>
 </html>

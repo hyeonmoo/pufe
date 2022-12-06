@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.putupiron.pufe.dao.GoodsDao;
 import com.putupiron.pufe.dao.HealthMateDao;
 import com.putupiron.pufe.dao.MachineDao;
@@ -46,52 +47,53 @@ public class Ctrl_Home {
 	@GetMapping("/")
 	public String home(SearchCondition sc, HttpSession session, Model m) throws Exception {
 		//홈 화면이 로드 될 때마다 불필요한 데이터 삭제
-		userDao.deleteExpiredGoods();
-		ptDao.decBookableNum();
-		ptDao.deleteExpiredRequest();
-		hMateDao.deleteExpiredMatching();
+		userDao.deleteExpiredGoods(); // 기한만료 상품 유저데이터에서 삭제
+		ptDao.decBookableNum(); // 예약확정 후 예약날짜 경과 시 PT예약가능횟수 차감
+		ptDao.deleteExpiredRequest(); // 요청 상태로 경과된 PT예약 삭제
+		hMateDao.deleteExpiredMatching(); // 날짜 지난 매칭 삭제
 
+		List<Machine> machineList = machineDao.selectAllMachines(); // 클럽 기구정보 로드(이미지 슬라이드)
+		List<Recommend> recommendList = recDao.indexrec(); // 추천 헬스정보 로드
+		recommendList.removeIf(rec->(recommendList.indexOf(rec)>5)); // 추천 정보 중 최신 6개의 게시물만 남겨놓고 삭제
+		m.addAttribute("machineList", machineList);
+		m.addAttribute("recommendList", recommendList);//세션정보로 로그인 한 유저 특정
+		
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		if(user == null) return "index";
-		Integer user_rank = userDao.userBig3Rank(user_email);
+		
+		// 유저 타입에 따라 회원정보란에 노출될 정보 차별화
 		switch (user.getUser_type()) {
-		case "A":
-			m.addAttribute("stats", userDao.statistics());
+		case "A": // 관리자
+			m.addAttribute("stats", userDao.statistics()); // 회원 통계정보 로드
 			break;
-		case "T":
-			List<UserView> myClientList = userDao.allUserView();
-			myClientList.removeIf(client->client.getTrainer()==null||!client.getTrainer().equals(user_email));
-			List<PTReserv> todayPTs = ptDao.reservList(user_email, user.getUser_type());
-			todayPTs.removeIf(pt->!pt.getPt_date().equals((LocalDate.now())));
-			String todayString="[";
-			for(PTReserv tp : todayPTs) todayString += "{name:'"+tp.getUser_name()+"', time:"+tp.getPt_time()+"},";
-			todayString = todayString.substring(0,todayString.length()-1);
-			todayString += "]";
+		case "T": // 트레이너
+			List<UserView> myClientList = userDao.allUserView(); // 모든 유저 정보 로드
+			myClientList.removeIf(client->client.getTrainer()==null||!client.getTrainer().equals(user_email)); // DAO로 받아온 모든 유저 중 로그인 한 트레이너 전담이 아닌 다른 유저들은 리스트에서 삭제
+			List<PTReserv> todayPTs = ptDao.reservList(user_email, user.getUser_type()); // 로그인 한 트레이너의 모든 PT예약정보 로드
+			todayPTs.removeIf(pt->!pt.getPt_date().equals((LocalDate.now()))); // 오늘 예약된 PT예약정보만 빼고 리스트에서 삭제
+			String todayString = new ObjectMapper().writeValueAsString(todayPTs); // 모델에 담길 객체타입 리스트를 자바스크립트에서 사용하기 위해 JSON직렬화
+			
 			m.addAttribute("clientNum",myClientList.size());
 			m.addAttribute("today",new Date());
 			m.addAttribute("todayString",todayString);
 			break;
-		case "U":
-			List<MyMatch> myMatches = hMateDao.confirmedPostOfUser(user_email);
-			MyMatch myMatch = null;
-			myMatches.removeIf(each->(LocalDateTime.of(each.getDate(), each.getTime()).isBefore(LocalDateTime.now())));
-			if(myMatches.size()!=0) {
-				myMatch = myMatches.get(0);
-				myMatch.setName(myMatch.getPoster_name().equals(user.getUser_name())?myMatch.getPartner_name():myMatch.getPoster_name());
+		case "U": // 일반회원
+			List<MyMatch> myMatches = hMateDao.confirmedPostOfUser(user_email); // 로그인 한 유저의 확정된 헬스메이트 매칭정보 로드(시간순으로 로드됨)
+			MyMatch myMatch = null; // 모델에 담기 위해 if문 밖에 선언
+			myMatches.removeIf(each->(LocalDateTime.of(each.getDate(), each.getTime()).isBefore(LocalDateTime.now()))); // 현재시각 이전의 매칭데이터는 삭제 -> 현재시각 이후 가장 최근의 매칭정보가 리스트 맨 앞에 위치하게 됨
+			if(myMatches.size()!=0) { // 매칭정보가 존재한다면
+				myMatch = myMatches.get(0); //맨 앞놈, 즉 가장 최근의 매칭정보를 모델에 담을 객체에 저장
+				myMatch.setName(myMatch.getPoster_name().equals(user.getUser_name())?myMatch.getPartner_name():myMatch.getPoster_name()); // 파트너 이름 저장(로그인유저가 포스팅을 했다면 파트너, 요청을 했다면 포스터)
 			}
 			m.addAttribute("myMatch",myMatch);
 			m.addAttribute("userview", userDao.homeUserView(user_email));
 			break;
 		}
-		List<Machine> machineList = machineDao.selectAllMachines();
-		List<Recommend> recommendList = recDao.indexrec();
-		recommendList.removeIf(rec->(recommendList.indexOf(rec)>5));
+		Integer user_rank = userDao.userBig3Rank(user_email); // 해당 유저의 3대중량 랭크정보 로드
 		
 		m.addAttribute("user", user);
 		m.addAttribute("rank", user_rank);
-		m.addAttribute("machineList", machineList);
-		m.addAttribute("recommendList", recommendList);
 		return "index";
 	}
 
@@ -100,7 +102,7 @@ public class Ctrl_Home {
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user", user);
-		m.addAttribute("from",hsReq.getServletPath());
+		m.addAttribute("from",hsReq.getServletPath()); //로그인 버튼이 아닌 다른 버튼을 누르고 로그인창에 진입했을 때 로그인 성공시 그 버튼으로 이동했어야 할 페이지의 ServletPath를 모델에 저장
 		return user;
 	}
 
@@ -108,27 +110,26 @@ public class Ctrl_Home {
 	@GetMapping("/menu1")
 	public String menu1(String viewType, HttpSession session, Model m, HttpServletRequest hsReq) throws Exception {
 		User user = navBar(session, m, hsReq);
-		if (user == null)
-			return "login";
+		if (user == null) //로그인 했어요?
+			return "login"; //안했음 가세요~
 		switch (user.getUser_type()) {
-		case "U":
-			List<Goods> goodsList = goodsDao.allGoods("noPT");
-			for(Goods goods:goodsList) goods.setEnd_date(LocalDate.now().plusDays(goods.getPeriod()*30));
+		case "U": //일반회원->상품구매 창으로 이동
+			List<Goods> goodsList = goodsDao.allGoods("noPT"); //모든 상품정보 로드(초기화면을 기간권으로 설정하기 위해 옵션은 noPT)
+			for(Goods goods:goodsList) goods.setEnd_date(LocalDate.now().plusDays(goods.getPeriod()*30)); // 현재날짜 기준 각 상품 구매시 만료일자를 저장
 			m.addAttribute("goodsList", goodsList);
 			return "menu_user1";
-		case "T":
+		case "T": //트레이너->자신이 전담하는 회원들 정보조회 페이지로 이동
 			m.addAttribute("tulist", userDao.TrainerUserView(user.getUser_email()));
 			return "menu_trainer1";
-		case "A":
-			if (viewType == null)
-				viewType = "user";
-			m.addAttribute("stats", userDao.statistics());
-			m.addAttribute("userlist", userDao.allUserView());
-			m.addAttribute("trainerlist", userDao.allTrainerView());
-			m.addAttribute("adminlist", userDao.allAdminView());
-			m.addAttribute("viewType", viewType);
+		case "A": //관리자->회원관리 페이지로 이동
+			if (viewType == null) viewType = "user"; //초기화면을 일반회원으로 설정
+			m.addAttribute("stats", userDao.statistics()); //회원 통계정보 저장
+			m.addAttribute("userlist", userDao.allUserView()); //일반회원정보
+			m.addAttribute("trainerlist", userDao.allTrainerView());//트레이너정보
+			m.addAttribute("adminlist", userDao.allAdminView());//관리자정보
+			m.addAttribute("viewType", viewType); //보여줄 화면 설정
 			return "menu_admin1";
-		default:
+		default: //어느 누구도 아닐리는 없긴함
 			return "redirect:/login";
 		}
 	}

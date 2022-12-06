@@ -3,66 +3,114 @@
 	margin: 100px auto 0 auto;
 }
 #form {
-	margin-top: 100px;
+	margin: 100px auto;
 	width: 700px;
-	margin-left: auto;
-	margin-right: auto;
 }
-#form>#rec_content {
-	margin-top: 10px;
+#form>textarea {
+	margin: 10px auto;
 	border: 0.2px solid rgb(199, 194, 194);
-	width: 680px;
-	height: 500px;
-}
-#form>#rec_content:focus {
+	width: 100%; height: 500px;
+	padding: 20px;
+	resize: none;
 	outline: none;
+	font:15px/1 mbng;
 }
 #form>#rec_title {
 	border: 0.2px solid rgb(199, 194, 194);
-	width: 680px;
+	width: 100%;
 	height: 40px;
-}
-#form>#rec_title:focus {
 	outline: none;
+	padding: 0 0 0 10px;
+	font:15px/1 mbng;
+}
+#form>hr {
+	border: 1px solid #121212;
+	background:#121212;
+	margin:10px auto;
+	width: 100%;
 }
 .button {
-	margin-top: 10px;
 	display: flex;
 	justify-content: end;
-	width: 680px;
+	width: 100%;
 }
-.a {
-	border-bottom: 3px solid black;
-	margin-bottom: 10px;
-	margin-top: 10px;
-	width: 680px;
-}
-
-.btn {
-	border-radius: 10px;
-	background-color: #121212;
-	color: white;
-	font-size: 11px;
+.button>input[type=button] {
+	width:80px;
+	border-radius: 0px;
+	border:0;
+	background-color: #ddd;
+	font: 13px/20px mbng;
 	padding: 5px;
 	cursor:pointer;
 }
-textarea {
-	padding: 20px;
-	resize: none;
+.button>input[type=button]:hover{
+	background:#ccc;
 }
-input {
-	padding: 0 0 0 10px;
+
+/* 댓글 스타일시트 */
+.commentArea, .commentArea>div{
+	width: 100%;
+}
+.commentArea>.commentWrite{
+	display:grid;
+	grid-template-columns: 90% 10%;
+	margin-top:10px;
+}
+.commentArea>h2{
+	font-size:20px;
+	margin:20px 0 0 0;
+	padding:10px;
+	background:#121212;
+	color:white;
+}
+.commentWrite>input{
+	height:30px;
+	margin-right:10px;
+	font:1em/30px mbng;
+	border:2px solid #121212;
+	padding-left:5px;
+}
+.commentWrite>button{
+	height:30px;
+	font:1em/25px mbng;
+	color:white;
+	background:#121212;
 	cursor:pointer;
+	border:0;
+	border-radius:5px;
 }
-ul{
+.commentWrite>button:hover{
+	background:#555;
+}
+.commentArea>#commentList{
 	list-style:none;
+	width:100%;
 }
-.commenter{
-	font-size: 11px;
+#commentList>li{
+	width:100%; height:30px;
+	display:grid;
+	grid-template-columns: 20% 80%;
+	position:relative;
 }
-ul li {
-	
-	margin:5px;
-	
-	list-style-type: none; float: left;}
-	
+#commentList>li>*{
+	font:1em/1 mbng;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	border-bottom:1px solid #ddd;
+}
+#commentList>li>span.comment{
+	text-align: left;
+	justify-content:flex-start;
+	padding-left:30px;
+}
+#commentList>li>a.delBtn{
+	position:absolute;
+	bottom:2px; right:5px;
+	cursor: pointer;
+	font-size:0.8em;
+	border:0;
+}
+#commentList>li>a.delBtn:hover{
+	text-decoration:underline;
+}

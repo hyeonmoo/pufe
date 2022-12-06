@@ -55,5 +55,5 @@
 .selected{background:rgb(70,130,150) !important;}
 .requested{background:rgb(250,130,0) !important;}
 .booked{background:rgb(100,200,100) !important;}
-.expired{background:#121212 !important; color:white !important;}
+.expired{background:#555 !important; color:white !important;}
 .time.booked, .time.requested{color:#121212 !important;}
