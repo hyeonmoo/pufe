@@ -71,7 +71,7 @@ public class Ctrl_Home {
 		case "T": // 트레이너
 			List<UserView> myClientList = userDao.allUserView(); // 모든 유저 정보 로드
 			myClientList.removeIf(client->client.getTrainer()==null||!client.getTrainer().equals(user_email)); // DAO로 받아온 모든 유저 중 로그인 한 트레이너 전담이 아닌 다른 유저들은 리스트에서 삭제
-			List<PTReserv> todayPTs = ptDao.reservList(user_email, user.getUser_type()); // 로그인 한 트레이너의 모든 PT예약정보 로드
+			List<PTReserv> todayPTs = ptDao.reservList(user_email, "U"); // 로그인 한 트레이너의 모든 PT예약정보 로드(예약확정된 것만)
 			todayPTs.removeIf(pt->!pt.getPt_date().equals((LocalDate.now()))); // 오늘 예약된 PT예약정보만 빼고 리스트에서 삭제
 			String todayString = new ObjectMapper().writeValueAsString(todayPTs); // 모델에 담길 객체타입 리스트를 자바스크립트에서 사용하기 위해 JSON직렬화
 			
@@ -103,7 +103,7 @@ public class Ctrl_Home {
 		String user_email = (String) session.getAttribute("email");
 		User user = userDao.selectUser(user_email);
 		m.addAttribute("user", user);
-		m.addAttribute("from",hsReq.getServletPath()); 
+		m.addAttribute("from",hsReq.getServletPath()); //이전페이지의 ServletPath를 모델로 전달
 		return user;
 	}
 	
@@ -143,22 +143,22 @@ public class Ctrl_Home {
 		User user = navBar(session, m, hsReq);
 		if (user == null) return "login";
 		switch (user.getUser_type()) {
-		case "U": 
-			if(!user.getProd_name().contains("PT")) {
+		case "U": //유저의 경우
+			if(!user.getProd_name().contains("PT")) { // PT이용권 안샀어?
 				ras.addFlashAttribute("msg","PT이용권을 구매한 회원만 이용 가능합니다.");
-				return "redirect:/";
-			} else if(user.getTrainer().equals("-")) {
+				return "redirect:/"; //돌아가~
+			} else if(user.getTrainer().equals("-")) { // 관리자가 게을러빠졋어?
 				ras.addFlashAttribute("msg","아직 전담 트레이너가 배정되지 않았습니다. 관리자에게 문의 바랍니다.");
-				return "redirect:/";
+				return "redirect:/"; //돌아가는건 너야~
 			}
 			return "menu_user2";
-		case "T": return "menu_trainer2";
-		case "A":
-			int totalCnt = machineDao.searchCnt(sc);
-			PageHandler ph = new PageHandler(totalCnt, sc);
-			List<Machine> machinelist = machineDao.search(sc);
-			m.addAttribute("machinelist", machinelist);
-			m.addAttribute("ph", ph);
+		case "T": return "menu_trainer2"; // rest api 쓸거라 그냥 페이지만 이동하면 됨
+		case "A": //관리자
+			int totalCnt = machineDao.searchCnt(sc); //기구 관련 정보 로드
+			PageHandler ph = new PageHandler(totalCnt, sc); // 페이지 관리
+			List<Machine> machinelist = machineDao.search(sc); // 현재 페이지에 로드할 기구 로드
+			m.addAttribute("machinelist", machinelist); // 기구 리스트 모델로 전달
+			m.addAttribute("ph", ph); // 페이지 관리 양식 전달
 			return "machineList";
 		default:
 			return "redirect:/login";
@@ -173,7 +173,7 @@ public class Ctrl_Home {
 		int totalCnt = recDao.searchCnt(sc);
 		PageHandler ph = new PageHandler(totalCnt, sc);
 		List<Recommend> list = recDao.search(sc);
-		m.addAttribute("now", new java.util.Date());
+		m.addAttribute("now", new java.util.Date()); // 게시글의 등록 시간 표기법을 구분하기위해 현재 시각을 모델로 전달
 		m.addAttribute("list", list);
 		m.addAttribute("ph", ph);
 		return "boarder_recommend";
@@ -194,7 +194,7 @@ public class Ctrl_Home {
 		User user = navBar(session, m, hsReq);
 		if (user == null)
 			return "redirect:/login";
-		List<BigThree> list = userDao.bigThreeRank();
+		List<BigThree> list = userDao.bigThreeRank(); // BIG3 랭킹순으로 리스트 로드
 		m.addAttribute("list", list);
 		return "bigThree";
 	}
@@ -205,9 +205,9 @@ public class Ctrl_Home {
 		User user = navBar(session, m, hsReq);
 		if (user == null)
 			return "redirect:/login";
-		m.addAttribute("myPosts",hMateDao.myPosts(user.getUser_email()));
-		m.addAttribute("myRequests",hMateDao.myRequests(user.getUser_email()));
-		m.addAttribute("postList",hMateDao.postList());
+		m.addAttribute("myPosts",hMateDao.myPosts(user.getUser_email())); //내 포스트 목록
+		m.addAttribute("myRequests",hMateDao.myRequests(user.getUser_email())); //내 요청 목록
+		m.addAttribute("postList",hMateDao.postList()); //모든 포스트 로드
 		return "boarder_matching";
 	}
 //	헬스메이트 매칭-매칭버튼

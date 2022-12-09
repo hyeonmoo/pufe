@@ -54,10 +54,10 @@ public class Ctrl_Healthmate {
 	@GetMapping("/list")
 	public ResponseEntity<List<HealthMate_Post>> getList(MatchCondition mc){
 		try {
-			mc.setDatePeriod(mc.getDateOption());
+			mc.setDatePeriod(mc.getDateOption()); //생성된 MatchCondition 객체로 날짜, 시간범위 설정
 			mc.setTimePeriod(mc.getTimeOption());
 			refreshRequests();
-			return new ResponseEntity<>(hMateDao.postList(mc),HttpStatus.OK);
+			return new ResponseEntity<>(hMateDao.postList(mc),HttpStatus.OK); // 해당 옵션으로 검색된 모든 포스트 전달
 		} catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -80,7 +80,7 @@ public class Ctrl_Healthmate {
 			hmp.setPoster(user.getUser_email());
 			hmp.setPoster_name(user.getUser_name());
 			hmp.setPoster_gender(user.getGender());
-			hmp.setPoster_big3(user.getSquat()+user.getBenchpress()+user.getDeadlift());
+			hmp.setPoster_big3(user.getSquat()+user.getBenchpress()+user.getDeadlift()); //날짜, 시간, 파트만 선언되어있는 Post객체에 세션유저정보 저장
 			if(hMateDao.post(hmp)!=1) throw new Exception("post 에러");
 			refreshRequests();
 			return new ResponseEntity<>("매칭을 등록했습니다.",HttpStatus.OK);
@@ -112,7 +112,7 @@ public class Ctrl_Healthmate {
 			hmj.setRequester(user.getUser_email());
 			hmj.setReq_name(user.getUser_name());
 			hmj.setReq_gender(user.getGender());
-			hmj.setReq_big3(user.getSquat()+user.getBenchpress()+user.getDeadlift());
+			hmj.setReq_big3(user.getSquat()+user.getBenchpress()+user.getDeadlift()); //포스트 번호만 들어있는 Join객체에 세션유저 정보 저장
 			if(hMateDao.request(hmj)!=1) throw new Exception("요청에 실패했습니다.");
 			refreshRequests();
 			return new ResponseEntity<>("요청을 등록했습니다.",HttpStatus.OK);

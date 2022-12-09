@@ -32,18 +32,13 @@ public class Ctrl_Goods_Cor {
 	
 	@GetMapping()
 	public String goods_cor(SearchCondition sc, HttpSession session, Model m) throws Exception {
-		
 		User user = navBar(session, m);
-		
 		if (user == null)
 			return "redirect:/login";
 		String user_type = user.getUser_type();
 		if (!user_type.equals("A"))
 			return "redirect:/login";
-		
 		m.addAttribute("goodsList", goodsDao.Goodscor());
-		
-
 		return "goods_read";
 	}
 
@@ -76,8 +71,6 @@ public class Ctrl_Goods_Cor {
 	@PostMapping("/remove")
 	public String remove(Integer goods_no, SearchCondition sc, Model m, HttpSession session, RedirectAttributes ras) {
 		try {
-		
-			
 			int rowCnt=goodsDao.remove(goods_no);
 			if(rowCnt==1) {
 				ras.addFlashAttribute("msg","del");
